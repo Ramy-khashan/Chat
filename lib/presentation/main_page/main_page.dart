@@ -1,6 +1,7 @@
 import 'package:chat/cubit/main_page_cubit/main_page_cubit.dart';
 import 'package:chat/presentation/edit_profile/edit_profile_page.dart';
 import 'package:chat/presentation/main_page/widgets/head_main_page.dart';
+import 'package:chat/presentation/main_page/widgets/search_section.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -40,7 +41,8 @@ class MainPageScreen extends StatelessWidget {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => EditProfileScreen()));
+                                builder: (context) =>
+                                    const EditProfileScreen()));
                       },
                       onTap: () {
                         controller.openSearch();
@@ -53,75 +55,21 @@ class MainPageScreen extends StatelessWidget {
                         ),
                         decoration: decoration,
                         child: controller.isOpenSearch
-                            ? StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection("users")
-                                    .where(
-                                      "userId",
-                                      isNotEqualTo: id,
-                                    )
-                                    .snapshots(),
-                                builder: (context,
-                                    AsyncSnapshot<QuerySnapshot>
-                                        snapshotSearch) {
-                                  if (controller
-                                      .searchController.text.isEmpty) {
-                                    return const SizedBox(
-                                      width: double.infinity,
-                                      child: Center(
-                                        child: Text("No Result Found"),
-                                      ),
-                                    );
-                                  } else if (snapshotSearch.hasData) {
-                                    return SizedBox(
-                                      child: ListView.builder(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 10),
-                                        itemBuilder: (context, index) {
-                                          if (snapshotSearch.data!.docs[index]
-                                              .get("name")
-                                              .toString()
-                                              .contains(controller
-                                                  .searchController.text
-                                                  .trim())) {
-                                            return ListTile(
-                                              onTap: () {},
-                                              leading: ImageAvatarItem(
-                                                img: snapshotSearch
-                                                    .data!.docs[index]
-                                                    .get("img"),
-                                                size: size,
-                                                bgColor: mainColor,
-                                                radius: .07,
-                                              ),
-                                              title: Text(snapshotSearch
-                                                  .data!.docs[index]
-                                                  .get("name")),
-                                            );
-                                          } else {
-                                            return const SizedBox.shrink();
-                                          }
-                                        },
-                                        itemCount:
-                                            snapshotSearch.data!.docs.length,
-                                      ),
-                                    );
-                                  } else {
-                                    return const LoadingItem();
-                                  }
-                                })
+                            ? SearchSection(size: size, id: id)
                             : controller.frindes.isEmpty
                                 ? Center(
                                     child: Text(
-                                    "Add frinds to chat with them",
-                                    style: TextStyle(
-                                        color: Colors.grey,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: size.shortestSide * .06),
-                                  ))
+                                      "Add frinds to chat with them",
+                                      style: TextStyle(
+                                          color: Colors.grey,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: size.shortestSide * .06),
+                                    ),
+                                  )
                                 : StreamBuilder(
                                     stream: FirebaseFirestore.instance
                                         .collection("users")
+                                        .where("userId", isNotEqualTo: id)
                                         .snapshots(),
                                     builder: (context,
                                         AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -136,7 +84,21 @@ class MainPageScreen extends StatelessWidget {
                                                   context,
                                                   MaterialPageRoute(
                                                       builder: (context) =>
-                                                          const ChatPageScreen()));
+                                                          ChatPageScreen(
+                                                            mineId: id,
+                                                            friendId: snapshot
+                                                                .data!
+                                                                .docs[index]
+                                                                .id,
+                                                            friendImg: snapshot
+                                                                .data!
+                                                                .docs[index]
+                                                                .get("img"),
+                                                            friendName: snapshot
+                                                                .data!
+                                                                .docs[index]
+                                                                .get("name"),
+                                                          )));
                                             },
                                             child: Padding(
                                                 padding: EdgeInsets.only(
@@ -144,17 +106,22 @@ class MainPageScreen extends StatelessWidget {
                                                 ),
                                                 child: ListTile(
                                                   leading: ImageAvatarItem(
+                                                    img: snapshot
+                                                        .data!.docs[index]
+                                                        .get("img"),
                                                     size: size,
                                                     bgColor: mainColor,
                                                     radius: .07,
                                                   ),
-                                                  title: const Text("Name"),
+                                                  title: Text(snapshot
+                                                      .data!.docs[index]
+                                                      .get("name")),
                                                   subtitle: const Text(
                                                       "Last Message"),
                                                   trailing: const Text("date"),
                                                 )),
                                           ),
-                                          itemCount: 20,
+                                          itemCount: snapshot.data!.docs.length,
                                         );
                                       } else {
                                         return const LoadingItem();

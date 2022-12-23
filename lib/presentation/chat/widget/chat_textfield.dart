@@ -52,7 +52,7 @@ class ChatTextFieldItem extends StatelessWidget {
             width: size.shortestSide * .025,
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: onSendMessage,
             icon: Icon(
               Icons.send,
               size: size.shortestSide * .08,

@@ -1,6 +1,4 @@
 import 'dart:developer';
-
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:chat/core/Widgets/loading.dart';
 import 'package:chat/core/constant.dart';
 import 'package:chat/cubit/edit_profile_cubit/edit_profile_cubit.dart';

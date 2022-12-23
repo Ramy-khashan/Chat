@@ -5,7 +5,9 @@ import '../../../core/Widgets/image_avatar.dart';
 
 class ChatHeadItem extends StatelessWidget {
   final Size size;
-  const ChatHeadItem({Key? key,required this.size}) : super(key: key);
+  final String friendImg;
+  final String friendName;
+  const ChatHeadItem({Key? key, required this.size, required this.friendImg, required this.friendName}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,23 +29,19 @@ class ChatHeadItem extends StatelessWidget {
           const Spacer(),
           ImageAvatarItem(
             size: size,
+            img: friendImg,
             bgColor: Colors.white,
             radius: .065,
           ),
           SizedBox(width: size.shortestSide * .035),
           Text(
-            "Name",
+            friendName,
             style: TextStyle(
                 fontSize: size.shortestSide * .06,
                 fontWeight: FontWeight.w600,
                 color: Colors.white),
           ),
           const Spacer(),
-          IconButtonItem(
-            icon: Icons.menu,
-            onTap: () {},
-            size: size,
-          ),
         ],
       ),
     );

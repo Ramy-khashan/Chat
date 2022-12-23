@@ -1,8 +1,9 @@
+import 'package:chat/core/app_keys.dart';
 import 'package:chat/core/constant.dart';
 import 'package:chat/presentation/splash_page/splash_page.dart';
- import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-  
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
@@ -16,7 +17,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: AppKeys.appTitle,
       theme: ThemeData(
         scaffoldBackgroundColor: mainColor,
         appBarTheme: const AppBarTheme(
