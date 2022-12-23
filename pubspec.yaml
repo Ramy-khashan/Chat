@@ -21,7 +21,7 @@ dependencies:
   cloud_firestore: 
   fluttertoast: 
   awesome_dialog: 
-  firebase_storage:
+  firebase_storage: ^10.2.18
   shared_preferences: 
 
 dev_dependencies:

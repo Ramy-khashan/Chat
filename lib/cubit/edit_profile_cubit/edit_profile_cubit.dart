@@ -72,13 +72,12 @@ class EditProfileCubit extends Cubit<EditProfileState> {
 
   uplodingImage(context) async {
     log(imageName!);
-    Reference ref = FirebaseStorage.instance
-        .ref()
-        .child(imageName! + '.jpg');
-    UploadTask uploadTask = ref.putFile(imageFile!);
-    final snapshot = await uploadTask.whenComplete(() => null);
-
-    await snapshot.ref.getDownloadURL().then((value) {
+    var ref = FirebaseStorage.instance.ref("CategoryImage/$imageName");
+      log("Enter2");
+      await ref.putFile(
+        File(imageFile!.path),
+      );
+      await ref.getDownloadURL().then((value) {
       image = value;
       editUserData(context);
     }).onError<FirebaseException>((error, stackTrace) {
