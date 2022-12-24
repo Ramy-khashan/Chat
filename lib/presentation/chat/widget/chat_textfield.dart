@@ -34,10 +34,12 @@ class ChatTextFieldItem extends StatelessWidget {
                         offset: const Offset(2, 2))
                   ]),
               child: TextField(
+                controller: messageController,
                 decoration: InputDecoration(
                   hintText: "Write your message....",
                   filled: true,
                   fillColor: Colors.white,
+                  
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide.none),

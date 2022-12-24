@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+ 
 import 'package:chat/core/Widgets/loading.dart';
 import 'package:chat/cubit/chat_cubit/chat_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -29,7 +28,7 @@ class ChatPageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return BlocProvider(
-      create: (context) => ChatCubit(),
+      create: (context) => ChatCubit()..getUserImage(),
       child: Scaffold(
         body: SafeArea(
           child: BlocBuilder<ChatCubit, ChatState>(
@@ -56,55 +55,64 @@ class ChatPageScreen extends StatelessWidget {
                                 friendId
                               ]).get(),
                               builder: (context, snapshot) {
-                                // List messages =
-                                //     snapshot.data!.docs[0].get("chat")[0];
-
-                                return StreamBuilder<QuerySnapshot>(
-                                  stream: FirebaseFirestore.instance
-                                      .collection("chats")
-                                      .doc(snapshot.data!.docs[0].id)
-                                      .collection("friedchat")
-                                      .snapshots(),
-                                  builder: (context,
-                                      AsyncSnapshot<QuerySnapshot>
-                                          snapshotMsg) {
-                                    if (snapshotMsg.hasData) {
-                                      return Expanded(
-                                        child: ListView.builder(
-                                          physics:
-                                              const BouncingScrollPhysics(),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal:
-                                                  size.shortestSide * .03,
-                                              vertical:
-                                                  size.shortestSide * .02),
-                                          itemBuilder: (context, index) =>
-                                              MessageShapeItem(
-                                                  message:
-                                                      "aadwokdoapkdwapodko $index",
-                                                  size: size),
-                                          reverse: true,
-                                          itemCount:
-                                              snapshotMsg.data!.docs.length,
-                                        ),
-                                      );
-                                    } else {
-                                      return const LoadingItem();
-                                    }
-                                  },
-                                );
+                                if (snapshot.hasData) {
+                                  controller.docsId =
+                                      (snapshot.data!.docs[0].id);
+                                  return StreamBuilder<QuerySnapshot>(
+                                    stream: FirebaseFirestore.instance
+                                        .collection("chats")
+                                        .doc(snapshot.data!.docs[0].id)
+                                        .collection("friedchat").orderBy("date",descending: true)
+                                        .snapshots(),
+                                    builder: (context,
+                                        AsyncSnapshot<QuerySnapshot>
+                                            snapshotMsg) {
+                                      if (snapshotMsg.hasData) {
+                                      
+                                        return Expanded(
+                                          child: ListView.builder(
+                                            reverse: true,
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal:
+                                                    size.shortestSide * .03,
+                                                vertical:
+                                                    size.shortestSide * .02),
+                                            itemBuilder: (context, index) {
+                                               
+                                              return MessageShapeItem(
+                                                  date: snapshotMsg
+                                                        .data!.docs[index]
+                                                        .get("date") as Timestamp,
+                                                  senderImage:controller.userImg,
+                                                  reciverImage:friendImg,
+                                                  isMyMsg:mineId==snapshotMsg
+                                                        .data!.docs[index]
+                                                        .get("userId"),
+                                                    message: snapshotMsg
+                                                        .data!.docs[index]
+                                                        .get("msg"),
+                                                    size: size);
+                                            },
+                                           
+                                            itemCount:
+                                                snapshotMsg.data!.docs.length,
+                                          ),
+                                        );
+                                      } else {
+                                        return const Expanded(
+                                            child: LoadingItem());
+                                      }
+                                    },
+                                  );
+                                } else {
+                                  return const Expanded(child: SizedBox());
+                                }
                               }),
                           ChatTextFieldItem(
                               onSendMessage: () {
-                                FirebaseFirestore.instance
-                                    .collection("chats")
-                                    .doc()
-                                    .update({
-                                  "chat": FieldValue.arrayUnion([
-                                    controller.messageController.value.text
-                                        .trim()
-                                  ])
-                                });
+                                controller.sendMessage(mineId);
                               },
                               size: size,
                               messageController: controller.messageController)

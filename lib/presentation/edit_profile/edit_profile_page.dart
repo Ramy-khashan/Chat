@@ -1,11 +1,6 @@
 import 'dart:developer';
-<<<<<<< Updated upstream
-import 'package:chat/core/Widgets/loading.dart';
-=======
-
- import 'package:chat/core/Widgets/loading.dart';
->>>>>>> Stashed changes
-import 'package:chat/core/constant.dart';
+ import 'package:chat/core/Widgets/loading.dart'; 
+ import 'package:chat/core/constant.dart';
 import 'package:chat/cubit/edit_profile_cubit/edit_profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
