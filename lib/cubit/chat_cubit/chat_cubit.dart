@@ -12,12 +12,44 @@ class ChatCubit extends Cubit<ChatState> {
   ChatCubit() : super(ChatInitial());
   static ChatCubit get(ctx) => BlocProvider.of(ctx);
   final messageController = TextEditingController();
+  bool isClickingMsg = false;
   String docsId = "";
   String userImg = "";
+  int selectedInex =-1;
+  bool isLoadingDocsId = false;
   getUserImage() async {
     SharedPreferences.getInstance().then((value) {
       userImg = value.getString(AppKeys.personalImageKey)!;
       emit(GetUserImageState());
+    });
+  }
+
+  showMessageTime() {
+    isClickingMsg = !isClickingMsg;
+    emit(ShowMsgTimeState());
+  }
+
+  Future getChatId({required String mineId, required String friendId}) async {
+    log("Enter");
+    isLoadingDocsId = true;
+    emit(StartGetChatIdState());
+
+    await FirebaseFirestore.instance.collection("chats").get().then((value) {
+      for (var element in value.docs) {
+        List connectons = element.get("users").toList();
+        log(connectons.toString());
+        if (connectons.contains(mineId) && connectons.contains(friendId)) {
+          docsId = element.id;
+          log(element.id);
+          break;
+        }
+      }
+      isLoadingDocsId = false;
+      emit(GetChatIdState());
+    }).onError<FirebaseException>((error, stackTrace) {
+      isLoadingDocsId = false;
+
+      emit(FaildGetChatIdState());
     });
   }
 

@@ -15,6 +15,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_bloc:
   bloc:
+  jiffy: ^5.0.0
   image_picker: 
   firebase_core: 
   firebase_auth: 

@@ -87,8 +87,21 @@ class SearchSection extends StatelessWidget {
                                               ])
                                             });
                                             FirebaseFirestore.instance
+                                                .collection("users")
+                                                .doc(snapshotSearch
+                                                    .data!.docs[index].id)
+                                                .update({
+                                              "connections":
+                                                  FieldValue.arrayUnion(
+                                                      [snapshotMine.data!.id])
+                                            });
+
+                                            FirebaseFirestore.instance
                                                 .collection("chats")
                                                 .add({
+                                              "user1": snapshotMine.data!.id,
+                                              "user2": snapshotSearch
+                                                  .data!.docs[index].id,
                                               "users": [
                                                 snapshotMine.data!.id,
                                                 snapshotSearch

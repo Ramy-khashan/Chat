@@ -1,7 +1,7 @@
- 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
- 
+import 'package:jiffy/jiffy.dart';
+
 import '../../../core/Widgets/image_avatar.dart';
 import '../../../core/constant.dart';
 
@@ -24,7 +24,7 @@ class MessageShapeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     return Directionality(
+    return Directionality(
       textDirection: isMyMsg ? TextDirection.rtl : TextDirection.ltr,
       child: Padding(
         padding: EdgeInsets.only(
@@ -33,6 +33,7 @@ class MessageShapeItem extends StatelessWidget {
             left: isMyMsg ? size.shortestSide * .15 : 0,
             right: isMyMsg ? 0 : size.shortestSide * .15),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ImageAvatarItem(
               size: size,
@@ -40,39 +41,41 @@ class MessageShapeItem extends StatelessWidget {
               bgColor: isMyMsg ? mainColor : Colors.grey.shade300,
               radius: .05,
             ),
-            Container(
-              margin: EdgeInsets.only(
-                  left: size.shortestSide * .01,
-                  right: size.shortestSide * .01),
-              padding: EdgeInsets.symmetric(
-                  horizontal: size.shortestSide * .03,
-                  vertical: size.longestSide * .015),
-              decoration: BoxDecoration(
-                color: isMyMsg ? mainColor : Colors.grey.shade300,
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(10),
-                  topRight: const Radius.circular(10),
-                  bottomLeft: Radius.circular(isMyMsg ? 10 : 0),
-                  bottomRight: Radius.circular(isMyMsg ? 0 : 10),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    message,
-                    style: TextStyle(
-                      color: isMyMsg ? Colors.white : Colors.black,
-                    ),
+            Expanded(
+              flex: message.length>20?1:0,
+              child: Container(
+                margin: EdgeInsets.only(
+                    left: size.shortestSide * .01,
+                    right: size.shortestSide * .01),
+                padding: EdgeInsets.symmetric(
+                    horizontal: size.shortestSide * .03,
+                    vertical: size.longestSide * .01),
+                decoration: BoxDecoration(
+                  color: isMyMsg ? mainColor : Colors.grey.shade300,
+                  borderRadius: BorderRadius.only(
+                    topLeft: const Radius.circular(10),
+                    topRight: const Radius.circular(10),
+                    bottomLeft: Radius.circular(isMyMsg ? 10 : 0),
+                    bottomRight: Radius.circular(isMyMsg ? 0 : 10),
                   ),
-                  Text("",
-                    // intl.DateFormat.jm().format(date.toDate()),
-                    // Jiffy(date.toDate().toString()).jms.toString(),
-                    style: TextStyle(
-                      color: isMyMsg ? Colors.white : Colors.black,
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      message.trim(),
+                      overflow: TextOverflow.clip,
+                      style: TextStyle(
+                        fontSize: size.shortestSide*.042,
+                    
+                        color: isMyMsg ? Colors.white : Colors.black,
+                      ),
                     ),
-                  )
-                ],
+                  
+                    
+                  ],
+                ),
               ),
             ),
           ],

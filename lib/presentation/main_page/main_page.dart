@@ -56,77 +56,113 @@ class MainPageScreen extends StatelessWidget {
                         decoration: decoration,
                         child: controller.isOpenSearch
                             ? SearchSection(size: size, id: id)
-                            : controller.frindes.isEmpty
-                                ? Center(
-                                    child: Text(
-                                      "Add frinds to chat with them",
-                                      style: TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: size.shortestSide * .06),
-                                    ),
-                                  )
-                                : StreamBuilder(
-                                    stream: FirebaseFirestore.instance
-                                        .collection("users")
-                                        .where("userId", isNotEqualTo: id)
-                                        .snapshots(),
-                                    builder: (context,
-                                        AsyncSnapshot<QuerySnapshot> snapshot) {
-                                      if (snapshot.hasData) {
-                                        return ListView.builder(
-                                          physics:
-                                              const BouncingScrollPhysics(),
-                                          itemBuilder: (context, index) =>
-                                              GestureDetector(
-                                            onTap: () {
-                                              Navigator.push(
-                                                  context,
-                                                  MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ChatPageScreen(
-                                                            mineId: id,
-                                                            friendId: snapshot
-                                                                .data!
-                                                                .docs[index]
-                                                                .id,
-                                                            friendImg: snapshot
-                                                                .data!
-                                                                .docs[index]
-                                                                .get("img"),
-                                                            friendName: snapshot
-                                                                .data!
-                                                                .docs[index]
-                                                                .get("name"),
-                                                          )));
-                                            },
-                                            child: Padding(
-                                                padding: EdgeInsets.only(
-                                                  top: size.longestSide * .01,
-                                                ),
-                                                child: ListTile(
-                                                  leading: ImageAvatarItem(
-                                                    img: snapshot
-                                                        .data!.docs[index]
-                                                        .get("img"),
-                                                    size: size,
-                                                    bgColor: mainColor,
-                                                    radius: .07,
-                                                  ),
-                                                  title: Text(snapshot
-                                                      .data!.docs[index]
-                                                      .get("name")),
-                                                  subtitle: const Text(
-                                                      "Last Message"),
-                                                  trailing: const Text("date"),
-                                                )),
-                                          ),
-                                          itemCount: snapshot.data!.docs.length,
-                                        );
-                                      } else {
-                                        return const LoadingItem();
-                                      }
-                                    })),
+                            : StreamBuilder(
+                                stream: FirebaseFirestore.instance
+                                    .collection("users")
+                                    .doc(id)
+                                    .snapshots(),
+                                builder: (context,
+                                    AsyncSnapshot<DocumentSnapshot> snapshot) {
+                                  if (snapshot.hasData) {
+                                    List<String> frinds = List.from(
+                                        snapshot.data!.get("connections"));
+                                    return frinds.isEmpty
+                                        ? Center(
+                                            child: Text(
+                                              "Add frinds to chat with them",
+                                              style: TextStyle(
+                                                  color: Colors.grey,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize:
+                                                      size.shortestSide * .06),
+                                            ),
+                                          )
+                                        : ListView.builder(
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            itemBuilder: (context, index) =>
+                                                StreamBuilder<DocumentSnapshot>(
+                                                    stream: FirebaseFirestore
+                                                        .instance
+                                                        .collection("users")
+                                                        .doc(frinds[index])
+                                                        .snapshots(),
+                                                    builder: (context,
+                                                        AsyncSnapshot<
+                                                                DocumentSnapshot>
+                                                            snapshot) {
+                                                      if (snapshot.hasData) {
+                                                        return GestureDetector(
+                                                          onTap: () {
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        ChatPageScreen(
+                                                                  mineId: id,
+                                                                  friendId:
+                                                                      snapshot
+                                                                          .data!
+                                                                          .id,
+                                                                  friendImg:
+                                                                      snapshot
+                                                                          .data!
+                                                                          .get(
+                                                                              "img"),
+                                                                  friendName:
+                                                                      snapshot
+                                                                          .data!
+                                                                          .get(
+                                                                              "name"),
+                                                                ),
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: Padding(
+                                                              padding:
+                                                                  EdgeInsets
+                                                                      .only(
+                                                                top:
+                                                                    size.longestSide *
+                                                                        .01,
+                                                              ),
+                                                              child: ListTile(
+                                                                leading:
+                                                                    ImageAvatarItem(
+                                                                  img: snapshot
+                                                                      .data!
+                                                                      .get(
+                                                                          "img"),
+                                                                  size: size,
+                                                                  bgColor:
+                                                                      mainColor,
+                                                                  radius: .07,
+                                                                ),
+                                                                title: Text(snapshot
+                                                                    .data!
+                                                                    .get(
+                                                                        "name")),
+                                                                subtitle:
+                                                                    const Text(
+                                                                        "Last Message"),
+                                                                trailing:
+                                                                    const Text(
+                                                                        "date"),
+                                                              )),
+                                                        );
+                                                      } else {
+                                                        return const SizedBox();
+                                                      }
+                                                    }),
+                                            itemCount: List.from(snapshot.data!
+                                                    .get("connections"))
+                                                .length,
+                                          );
+                                  } else {
+                                    return const LoadingItem();
+                                  }
+                                })),
                   ),
                 ],
               );
