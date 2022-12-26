@@ -11,3 +11,4 @@ class UpdateValueState extends MainPageState {}
 class GetIdState extends MainPageState {}
 
 class GetFriendsState extends MainPageState {}
+class IfNotExsistState extends MainPageState {}

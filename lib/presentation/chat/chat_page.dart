@@ -53,43 +53,32 @@ class ChatPageScreen extends StatelessWidget {
                       child: Column(
                         children: [
                           !controller.isLoadingDocsId
-                              ? controller.docsId.isEmpty
-                                  ? Expanded(
-                                      child: Center(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            Text("Image"),
-                                            Text("Take with your friend")
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  : StreamBuilder<QuerySnapshot>(
-                                      stream: FirebaseFirestore.instance
-                                          .collection("chats")
-                                          .doc(controller.docsId)
-                                          .collection("friedchat")
-                                          .orderBy("date", descending: true)
-                                          .snapshots(),
-                                      builder: (context,
-                                          AsyncSnapshot<QuerySnapshot>
-                                              snapshotMsg) {
-                                        if (snapshotMsg.hasData) {
-                                          return Expanded(
-                                            child: ListView.builder(
-                                              reverse: true,
-                                              physics:
-                                                  const BouncingScrollPhysics(),
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal:
-                                                      size.shortestSide * .03,
-                                                  vertical:
-                                                      size.shortestSide * .02),
-                                              itemBuilder: (context, index) {
-                                                return Column(
-                                                  children: [
-                                                controller.selectedInex==index?    controller.isClickingMsg
+                              ? StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance
+                                      .collection("chats")
+                                      .doc(controller.docsId)
+                                      .collection("friedchat")
+                                      .orderBy("date", descending: true)
+                                      .snapshots(),
+                                  builder: (context,
+                                      AsyncSnapshot<QuerySnapshot>
+                                          snapshotMsg) {
+                                    if (snapshotMsg.hasData) {
+                                      return Expanded(
+                                        child: ListView.builder(
+                                          reverse: true,
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal:
+                                                  size.shortestSide * .03,
+                                              vertical:
+                                                  size.shortestSide * .02),
+                                          itemBuilder: (context, index) {
+                                            return Column(
+                                              children: [
+                                                controller.selectedInex == index
+                                                    ? controller.isClickingMsg
                                                         ? Center(
                                                             child: Text(
                                                               // intl.DateFormat.jm().format(date.toDate()),
@@ -114,48 +103,44 @@ class ChatPageScreen extends StatelessWidget {
                                                           )
                                                         : const SizedBox
                                                             .shrink()
-                                                        : const SizedBox
-                                                            .shrink(),
-                                                    InkWell(
-                                                      onTap: () {
-                                                        controller
-                                                            .showMessageTime();
-                                                        controller.selectedInex=index;
-                                                      },
-                                                      child: MessageShapeItem(
-                                                          date: snapshotMsg
-                                                                  .data!
-                                                                  .docs[index]
-                                                                  .get("date")
-                                                              as Timestamp,
-                                                          senderImage:
-                                                              controller
-                                                                  .userImg,
-                                                          reciverImage:
-                                                              friendImg,
-                                                          isMyMsg: mineId ==
-                                                              snapshotMsg.data!
-                                                                  .docs[index]
-                                                                  .get(
-                                                                      "userId"),
-                                                          message: snapshotMsg
+                                                    : const SizedBox.shrink(),
+                                                InkWell(
+                                                  onTap: () {
+                                                    controller
+                                                        .showMessageTime();
+                                                    controller.selectedInex =
+                                                        index;
+                                                  },
+                                                  child: MessageShapeItem(
+                                                      date: snapshotMsg
                                                               .data!.docs[index]
-                                                              .get("msg"),
-                                                          size: size),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                              itemCount:
-                                                  snapshotMsg.data!.docs.length,
-                                            ),
-                                          );
-                                        } else {
-                                          return const Expanded(
-                                              child: LoadingItem());
-                                        }
-                                      },
-                                    )
+                                                              .get("date")
+                                                          as Timestamp,
+                                                      senderImage:
+                                                          controller.userImg,
+                                                      reciverImage: friendImg,
+                                                      isMyMsg: mineId ==
+                                                          snapshotMsg
+                                                              .data!.docs[index]
+                                                              .get("userId"),
+                                                      message: snapshotMsg
+                                                          .data!.docs[index]
+                                                          .get("msg"),
+                                                      size: size),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                          itemCount:
+                                              snapshotMsg.data!.docs.length,
+                                        ),
+                                      );
+                                    } else {
+                                      return const Expanded(
+                                          child: LoadingItem());
+                                    }
+                                  },
+                                )
                               : const Expanded(child: SizedBox()),
                           ChatTextFieldItem(
                               onSendMessage: controller.isLoadingDocsId

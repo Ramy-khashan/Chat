@@ -14,14 +14,18 @@ import '../chat/chat_page.dart';
 
 class MainPageScreen extends StatelessWidget {
   final String id;
-  const MainPageScreen({Key? key, required this.id}) : super(key: key);
+  final bool isFromReg;
+  const MainPageScreen({Key? key, required this.id, this.isFromReg = false})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
 
     return BlocProvider(
-      create: (context) => MainPageCubit()..getImage(id: id),
+      create: (context) => MainPageCubit()
+        ..initialRegister(isFromReg: isFromReg, context: context, size: size)
+        ..getImage(id: id),
       child: Scaffold(
         body: SafeArea(
           child: BlocBuilder<MainPageCubit, MainPageState>(

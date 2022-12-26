@@ -20,19 +20,77 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   EditProfileCubit() : super(EditProfileInitial());
 
   static EditProfileCubit get(ctx) => BlocProvider.of(ctx);
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String userId = "";
   String name = "";
   String image = "";
+  bool? containId;
   final nameController = TextEditingController();
+  final friendIdController = TextEditingController();
+  addFriend() {
+    if (formKey.currentState!.validate()) {
+      log("Enter");
+      /* 
+                                                                    
+                                                                
+                                                                controller
+                                                                        .containId =
+                                                                    false;
+                                                                await FirebaseFirestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        "users")
+                                                                    .get()
+                                                                    .then(
+                                                                        (value) {
+                                                                  for (var element
+                                                                      in value
+                                                                          .docs) {
+                                                                    if (element
+                                                                            .id ==
+                                                                        controller
+                                                                            .friendIdController
+                                                                            .value
+                                                                            .text
+                                                                            .trim()) {
+                                                                      controller
+                                                                              .containId =
+                                                                          true;
+                                                                    }
+                                                                  }
+                                                                });
+                                                                if (controller
+                                                                    .containId!) {
+                                                                  Fluttertoast
+                                                                      .showToast(
+                                                                          msg:
+                                                                              "LOl");
+                                                                } else {
+                                                                  Fluttertoast
+                                                                      .showToast(
+                                                                          msg:
+                                                                              "No One with this id");
+                                                                }
+                                                                     */
+    }
+  }
+
+  valid() {
+    if (formKey.currentState!.validate()) {
+      ("message");
+    }
+  }
 
   File? imageFile;
   String? imageName;
   final picker = ImagePicker();
   List<String> images = [];
   bool isGettingDataLoad = false;
+  bool? isPrivacy;
   getInitialValues() async {
     isGettingDataLoad = true;
     emit(GettingUserDataState());
+
     await SharedPreferences.getInstance().then((sharedPreferences) {
       userId = sharedPreferences.getString(AppKeys.userId)!;
       name = sharedPreferences.getString(AppKeys.nameKey)!;
@@ -45,6 +103,29 @@ class EditProfileCubit extends Cubit<EditProfileState> {
 
       emit(FaildGettingUserDataState());
     });
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .get()
+        .then((value) {
+      isPrivacy = value.get("isPrivate");
+      emit(GetIsPrivacyState());
+    });
+  }
+
+  changePrivacy(value) async {
+    log(isPrivacy.toString());
+    log(value.toString());
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .update({"isPrivate": value}).whenComplete(() {
+      isPrivacy = value;
+
+      log(isPrivacy.toString());
+    });
+    log(isPrivacy.toString());
+    emit(ChangePrivacyState());
   }
 
   getStaticImage() {
@@ -73,11 +154,11 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   uplodingImage(context) async {
     log(imageName!);
     var ref = FirebaseStorage.instance.ref("CategoryImage/$imageName");
-      log("Enter2");
-      await ref.putFile(
-        File(imageFile!.path),
-      );
-      await ref.getDownloadURL().then((value) {
+    log("Enter2");
+    await ref.putFile(
+      File(imageFile!.path),
+    );
+    await ref.getDownloadURL().then((value) {
       image = value;
       editUserData(context);
     }).onError<FirebaseException>((error, stackTrace) {

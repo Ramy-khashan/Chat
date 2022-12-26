@@ -11,6 +11,8 @@ class GettingUserDataState extends EditProfileState {}
 class SuccessGettingUserDataState extends EditProfileState {}
 
 class FaildGettingUserDataState extends EditProfileState {}
+class GetIsPrivacyState extends EditProfileState {}
+class ChangePrivacyState extends EditProfileState {}
 
 class UpdateUserDataState extends EditProfileState {}
 

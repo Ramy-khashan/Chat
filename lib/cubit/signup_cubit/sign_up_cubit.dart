@@ -69,6 +69,7 @@ class SignUpCubit extends Cubit<SignUpState> {
         "email": emailController.text.trim(),
         "connections": [],
         "img": image,
+        "isPrivate": true,
         "password": passwordController.text.trim(),
       }).then((cloudValue) {
         FirebaseFirestore.instance
@@ -85,6 +86,8 @@ class SignUpCubit extends Cubit<SignUpState> {
               MaterialPageRoute(
                   builder: (context) => MainPageScreen(
                         id: cloudValue.id,
+isFromReg:true,
+                      
                       )),
               (route) => false);
           isLoading = false;
