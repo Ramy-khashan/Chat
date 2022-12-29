@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:chat/core/Widgets/loading.dart';
 import 'package:chat/cubit/chat_cubit/chat_cubit.dart';
+import 'package:chat/presentation/chat/widget/show_friend_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,9 +10,9 @@ import 'package:jiffy/jiffy.dart';
 
 import '../../core/constant.dart';
 import '../../cubit/chat_cubit/chat_state.dart';
-import 'widget/chat_textfield.dart';
+import '../../core/Widgets/chat_textfield.dart';
 import 'widget/head.dart';
-import 'widget/message_shape.dart';
+import '../../core/Widgets/message_shape.dart';
 
 class ChatPageScreen extends StatelessWidget {
   final String friendId;
@@ -35,20 +36,25 @@ class ChatPageScreen extends StatelessWidget {
       create: (context) => ChatCubit()
         ..getChatId(mineId: mineId, friendId: friendId)
         ..getUserImage(),
-      child: Scaffold(
-        body: SafeArea(
-          child: BlocBuilder<ChatCubit, ChatState>(
-            builder: (context, state) {
-              final controller = ChatCubit.get(context);
-              return Column(
+      child: BlocBuilder<ChatCubit, ChatState>(
+        builder: (context, state) {
+          final controller = ChatCubit.get(context);
+          return Scaffold(
+            body: SafeArea(
+              child: Column(
                 children: [
                   ChatHeadItem(
+                    tag: controller.tag,
+                    onTap: () {
+                      Navigator.push(context, MaterialPageRoute(builder:(context) => ShowFrindImage(friendId: friendId, friendImg: friendImg),));
+                    },
                     size: size,
                     friendImg: friendImg,
                     friendName: friendName,
                   ),
                   Expanded(
                     child: Container(
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
                       decoration: decoration,
                       child: Column(
                         children: [
@@ -156,7 +162,11 @@ class ChatPageScreen extends StatelessWidget {
                                           controller.sendMessage(mineId);
                                         });
                                       } else {
-                                        controller.sendMessage(mineId);
+                                        if (controller.messageController.text
+                                            .trim()
+                                            .isNotEmpty) {
+                                          controller.sendMessage(mineId);
+                                        }
                                       }
                                     },
                               size: size,
@@ -166,10 +176,10 @@ class ChatPageScreen extends StatelessWidget {
                     ),
                   )
                 ],
-              );
-            },
-          ),
-        ),
+              ),
+            ),
+          );
+        },
       ),
     );
   }

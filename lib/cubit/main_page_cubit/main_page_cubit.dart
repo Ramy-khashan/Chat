@@ -1,9 +1,16 @@
+import 'dart:developer';
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:path/path.dart' as path;
+import 'dart:math' as math;
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:chat/core/constant.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'main_page_state.dart';
 
@@ -12,10 +19,22 @@ class MainPageCubit extends Cubit<MainPageState> {
   static MainPageCubit get(ctx) => BlocProvider.of(ctx);
   bool isOpenSearch = false;
   final searchController = TextEditingController();
+  final groupNameController = TextEditingController();
+  bool isNextStepGroup = false;
+  String image = "";
+  File? imageFile;
+  String? imageName;
+  final picker = ImagePicker();
   openSearch() {
     isOpenSearch = !isOpenSearch;
     searchController.clear();
     emit(ShowSearchState());
+  }
+
+  int selectedTap = 0;
+  onChangeTap(index) {
+    selectedTap = index;
+    emit(ChangeTapState());
   }
 
   String img = "";
@@ -64,5 +83,89 @@ class MainPageCubit extends Cubit<MainPageState> {
       img = value.get("img");
       emit(UserImageState());
     });
+  }
+
+  Future getGroupImage() async {
+    try {
+      log("enter1");
+      XFile? value = await picker.pickImage(source: ImageSource.gallery);
+      int ranNum = math.Random().nextInt(10000000);
+      imageName = path.basename(value!.path) + ranNum.toString();
+      imageFile = File(value.path);
+      emit(GetGroupImageState());
+      log("enter2");
+    } catch (e) {
+      log(e.toString());
+    }
+  }
+bool isLodingGroupData=false;
+ Future uplodingImage(context,id) async {
+    log(imageName!);
+    var ref = FirebaseStorage.instance.ref("GroupImage/$imageName");
+    log("Enter2");
+    await ref.putFile(
+      File(imageFile!.path),
+    );
+    await ref.getDownloadURL().then((value)async{
+      image = value;
+     await createGroup(context,image,id);
+    }).onError<FirebaseException>((error, stackTrace) {
+      isLodingGroupData=false;
+      Fluttertoast.showToast(msg: error.message!);
+    });
+  }
+  
+
+  List connections = [];
+  List connectionsChecks = [];
+  List selectedConnections = [];
+
+  Future createGroup(context,img,id) async{
+   await FirebaseFirestore.instance.collection("group").add({
+      "users": selectedConnections,
+      "group_name": groupNameController.value.text.trim(),
+      "group_img": img,
+      "admin":id
+    }).then((value) {
+      FirebaseFirestore.instance
+          .collection("group")
+          .doc(value.id)
+          .update({"group_id": value.id}).whenComplete(() {
+     isLodingGroupData=false;
+
+        Fluttertoast.showToast(msg: "Group Created Successfully");
+        Navigator.pop(context);
+      }).onError<FirebaseException>((error, stackTrace) {
+     isLodingGroupData=false;
+
+        Fluttertoast.showToast(
+          
+            msg: error.message ?? "Something went wrong, Check your network");
+      });
+    });
+  }
+
+  getFriends(id) async {
+    connections = [];
+    connectionsChecks = [];
+    selectedConnections = [];
+    selectedConnections.add(id);
+    FirebaseFirestore.instance.collection("users").doc(id).get().then((value) {
+      for (var element in List.from(value.get("connections"))) {
+        connectionsChecks.add(0);
+        connections.add(element);
+      }
+    });
+    emit(GetFriendsState());
+  }
+
+  addToSelected(index) {
+    if (connectionsChecks[index] == 0) {
+      connectionsChecks[index] = 1;
+      selectedConnections.add(connections[index]);
+    } else if (connectionsChecks[index] == 1) {
+      connectionsChecks[index] = 0;
+      selectedConnections.remove(connections[index]);
+    }
   }
 }

@@ -1,0 +1,28 @@
+^H:\MINE WORK\FLUTTER COURES\APP IN PROGRESS\CHAT\BUILD\WINDOWS\CMAKEFILES\B52223DA2436AA530E74C1B42A62D366\FLUTTER_WINDOWS.DLL.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -E env FLUTTER_ROOT=C:\src\flutter1 "PROJECT_DIR=H:\Mine work\Flutter Coures\app in progress\chat" FLUTTER_ROOT=C:\src\flutter1 "FLUTTER_EPHEMERAL_DIR=H:\Mine work\Flutter Coures\app in progress\chat\windows\flutter\ephemeral" "PROJECT_DIR=H:\Mine work\Flutter Coures\app in progress\chat" "FLUTTER_TARGET=H:\Mine work\Flutter Coures\app in progress\chat\lib\main.dart" DART_DEFINES=RkxVVFRFUl9XRUJfQVVUT19ERVRFQ1Q9dHJ1ZQ== DART_OBFUSCATION=false TRACK_WIDGET_CREATION=true TREE_SHAKE_ICONS=false "PACKAGE_CONFIG=H:\Mine work\Flutter Coures\app in progress\chat\.dart_tool\package_config.json" C:/src/flutter1/packages/flutter_tools/bin/tool_backend.bat windows-x64 Debug
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^H:\MINE WORK\FLUTTER COURES\APP IN PROGRESS\CHAT\BUILD\WINDOWS\CMAKEFILES\CF46C4F76EDAFED522DFF69885C799CE\FLUTTER_ASSEMBLE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^H:\MINE WORK\FLUTTER COURES\APP IN PROGRESS\CHAT\WINDOWS\FLUTTER\CMAKELISTS.TXT
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" "-SH:/Mine work/Flutter Coures/app in progress/chat/windows" "-BH:/Mine work/Flutter Coures/app in progress/chat/build/windows" --check-stamp-file "H:/Mine work/Flutter Coures/app in progress/chat/build/windows/flutter/CMakeFiles/generate.stamp"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

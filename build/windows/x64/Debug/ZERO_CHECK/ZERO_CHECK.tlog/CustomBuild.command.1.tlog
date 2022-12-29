@@ -1,0 +1,10 @@
+^H:\MINE WORK\FLUTTER COURES\APP IN PROGRESS\CHAT\BUILD\WINDOWS\CMAKEFILES\FB85216729E086E142F6074BABFABB98\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" "-SH:/Mine work/Flutter Coures/app in progress/chat/windows" "-BH:/Mine work/Flutter Coures/app in progress/chat/build/windows" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "H:/Mine work/Flutter Coures/app in progress/chat/build/windows/chat.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

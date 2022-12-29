@@ -15,7 +15,7 @@ class ChatCubit extends Cubit<ChatState> {
   bool isClickingMsg = false;
   String docsId = "";
   String userImg = "";
-  int selectedInex =-1;
+  int selectedInex = -1;
   bool isLoadingDocsId = false;
   getUserImage() async {
     SharedPreferences.getInstance().then((value) {
@@ -68,5 +68,14 @@ class ChatCubit extends Cubit<ChatState> {
     }).onError<FirebaseException>((error, stackTrace) {
       log(error.message!);
     });
+  }
+
+  String tag = "123";
+  bool show = false;
+  showFriendImage(frindId) {
+    Future.delayed(Duration(milliseconds: 500));
+    show = !show;
+    tag = frindId;
+    emit(ShowFriendImageState());
   }
 }

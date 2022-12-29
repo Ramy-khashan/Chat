@@ -1,8 +1,12 @@
+import 'package:chat/core/Widgets/button.dart';
 import 'package:chat/cubit/main_page_cubit/main_page_cubit.dart';
 import 'package:chat/presentation/edit_profile/edit_profile_page.dart';
+import 'package:chat/presentation/main_page/widgets/chat_part.dart';
+import 'package:chat/presentation/main_page/widgets/group_part_item.dart';
 import 'package:chat/presentation/main_page/widgets/head_main_page.dart';
 import 'package:chat/presentation/main_page/widgets/search_section.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -23,7 +27,7 @@ class MainPageScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
 
     return BlocProvider(
-      create: (context) => MainPageCubit()
+      create: (context) => MainPageCubit()..getFriends(id)
         ..initialRegister(isFromReg: isFromReg, context: context, size: size)
         ..getImage(id: id),
       child: Scaffold(
@@ -53,120 +57,41 @@ class MainPageScreen extends StatelessWidget {
                       },
                       size: size),
                   Expanded(
-                    child: Container(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: size.shortestSide * .06,
-                        ),
-                        decoration: decoration,
-                        child: controller.isOpenSearch
-                            ? SearchSection(size: size, id: id)
-                            : StreamBuilder(
-                                stream: FirebaseFirestore.instance
-                                    .collection("users")
-                                    .doc(id)
-                                    .snapshots(),
-                                builder: (context,
-                                    AsyncSnapshot<DocumentSnapshot> snapshot) {
-                                  if (snapshot.hasData) {
-                                    List<String> frinds = List.from(
-                                        snapshot.data!.get("connections"));
-                                    return frinds.isEmpty
-                                        ? Center(
-                                            child: Text(
-                                              "Add frinds to chat with them",
-                                              style: TextStyle(
-                                                  color: Colors.grey,
-                                                  fontWeight: FontWeight.w600,
-                                                  fontSize:
-                                                      size.shortestSide * .06),
-                                            ),
-                                          )
-                                        : ListView.builder(
-                                            physics:
-                                                const BouncingScrollPhysics(),
-                                            itemBuilder: (context, index) =>
-                                                StreamBuilder<DocumentSnapshot>(
-                                                    stream: FirebaseFirestore
-                                                        .instance
-                                                        .collection("users")
-                                                        .doc(frinds[index])
-                                                        .snapshots(),
-                                                    builder: (context,
-                                                        AsyncSnapshot<
-                                                                DocumentSnapshot>
-                                                            snapshot) {
-                                                      if (snapshot.hasData) {
-                                                        return GestureDetector(
-                                                          onTap: () {
-                                                            Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                builder:
-                                                                    (context) =>
-                                                                        ChatPageScreen(
-                                                                  mineId: id,
-                                                                  friendId:
-                                                                      snapshot
-                                                                          .data!
-                                                                          .id,
-                                                                  friendImg:
-                                                                      snapshot
-                                                                          .data!
-                                                                          .get(
-                                                                              "img"),
-                                                                  friendName:
-                                                                      snapshot
-                                                                          .data!
-                                                                          .get(
-                                                                              "name"),
-                                                                ),
-                                                              ),
-                                                            );
-                                                          },
-                                                          child: Padding(
-                                                              padding:
-                                                                  EdgeInsets
-                                                                      .only(
-                                                                top:
-                                                                    size.longestSide *
-                                                                        .01,
-                                                              ),
-                                                              child: ListTile(
-                                                                leading:
-                                                                    ImageAvatarItem(
-                                                                  img: snapshot
-                                                                      .data!
-                                                                      .get(
-                                                                          "img"),
-                                                                  size: size,
-                                                                  bgColor:
-                                                                      mainColor,
-                                                                  radius: .07,
-                                                                ),
-                                                                title: Text(snapshot
-                                                                    .data!
-                                                                    .get(
-                                                                        "name")),
-                                                                subtitle:
-                                                                    const Text(
-                                                                        "Last Message"),
-                                                                trailing:
-                                                                    const Text(
-                                                                        "date"),
-                                                              )),
-                                                        );
-                                                      } else {
-                                                        return const SizedBox();
-                                                      }
-                                                    }),
-                                            itemCount: List.from(snapshot.data!
-                                                    .get("connections"))
-                                                .length,
-                                          );
-                                  } else {
-                                    return const LoadingItem();
-                                  }
-                                })),
+                    child: DefaultTabController(
+                      length: 2,
+                      child: Container(
+                          decoration: decoration,
+                          child: controller.isOpenSearch
+                              ? SearchSection(size: size, id: id)
+                              : Column(children: [
+                                  TabBar(
+                                      indicatorColor: Colors.blue.shade600,
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: size.height * .02),
+                                      labelColor: Colors.amber.shade700,
+                                      labelStyle: TextStyle(
+                                          fontSize: size.shortestSide * .043,
+                                          fontWeight: FontWeight.bold),
+                                      onTap: controller.onChangeTap,
+                                      tabs: const [
+                                        Tab(
+                                          text: "Chat",
+                                        ),
+                                        Tab(
+                                          text: "Groups", 
+                                        )
+                                      ]),
+                                  Expanded(
+                                    child: TabBarView(
+                                      physics: const BouncingScrollPhysics(),
+                                      children: [
+                                        ChatPartItem(size: size, id: id),
+                                        GroupPartItem(id: id)
+                                           ],
+                                    ),
+                                  )
+                                ])),
+                    ),
                   ),
                 ],
               );

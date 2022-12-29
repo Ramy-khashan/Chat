@@ -20,64 +20,79 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   EditProfileCubit() : super(EditProfileInitial());
 
   static EditProfileCubit get(ctx) => BlocProvider.of(ctx);
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   String userId = "";
   String name = "";
   String image = "";
   bool? containId;
   final nameController = TextEditingController();
   final friendIdController = TextEditingController();
-  addFriend() {
-    if (formKey.currentState!.validate()) {
-      log("Enter");
-      /* 
-                                                                    
-                                                                
-                                                                controller
-                                                                        .containId =
-                                                                    false;
-                                                                await FirebaseFirestore
-                                                                    .instance
-                                                                    .collection(
-                                                                        "users")
-                                                                    .get()
-                                                                    .then(
-                                                                        (value) {
-                                                                  for (var element
-                                                                      in value
-                                                                          .docs) {
-                                                                    if (element
-                                                                            .id ==
-                                                                        controller
-                                                                            .friendIdController
-                                                                            .value
-                                                                            .text
-                                                                            .trim()) {
-                                                                      controller
-                                                                              .containId =
-                                                                          true;
-                                                                    }
-                                                                  }
-                                                                });
-                                                                if (controller
-                                                                    .containId!) {
-                                                                  Fluttertoast
-                                                                      .showToast(
-                                                                          msg:
-                                                                              "LOl");
-                                                                } else {
-                                                                  Fluttertoast
-                                                                      .showToast(
-                                                                          msg:
-                                                                              "No One with this id");
-                                                                }
-                                                                     */
-    }
-  }
+  Future addFriend(context) async {
+    log(friendIdController.text);
+    log(userId);
+    if (friendIdController.text.trim() == userId) {
+      Fluttertoast.showToast(msg: "Enter Friend Id Not Yours");
+    } else if (friendIdController.text.trim().isEmpty) {
+      Fluttertoast.showToast(msg: "This field must be fill with friend id");
+    } else {
+      containId = false;
+      await FirebaseFirestore.instance.collection("users").get().then((value) {
+        for (var element in value.docs) {
+          if (element.id == friendIdController.value.text.trim()) {
+            containId = true;
+          }
+        }
+      });
+      if (containId!) {
+        FirebaseFirestore.instance
+            .collection("users")
+            .doc(userId)
+            .get()
+            .then((value) async {
+          log("id test0 : " + friendIdController.text.trim());
 
-  valid() {
-    if (formKey.currentState!.validate()) {
-      ("message");
+          List connections = value.get("connections").toList();
+          log(connections.toString());
+          bool isExsist =
+              connections.contains(friendIdController.value.text.trim());
+          if (isExsist) {
+            Fluttertoast.showToast(msg: "Alerady Your Frind");
+          } else {
+            log("id test : " + friendIdController.value.text.trim());
+            await FirebaseFirestore.instance
+                .collection("users")
+                .doc(userId)
+                .update({
+              "connections":
+                  FieldValue.arrayUnion([friendIdController.value.text.trim()])
+            }).whenComplete(() {
+              FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(friendIdController.value.text.trim())
+                  .update({
+                "connections": FieldValue.arrayUnion([userId])
+              }).whenComplete(() async {
+                await FirebaseFirestore.instance.collection("chats").add({
+                  "user1": friendIdController.value.text.trim(),
+                  "user2": userId,
+                  "users": [userId, friendIdController.value.text.trim()],
+                }).then((value) {
+                  FirebaseFirestore.instance
+                      .collection("chats")
+                      .doc(value.id)
+                      .collection("frinds_chat");
+                });
+                Navigator.pop(context);
+              });
+
+              Fluttertoast.showToast(msg: "Added successfully");
+            }).onError((error, stackTrace) {
+              Fluttertoast.showToast(msg: "Faild to add your frind");
+            });
+          }
+        });
+      } else {
+        Fluttertoast.showToast(msg: "No One with this id");
+      }
     }
   }
 
@@ -116,14 +131,11 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   changePrivacy(value) async {
     log(isPrivacy.toString());
     log(value.toString());
+      isPrivacy = value;
     await FirebaseFirestore.instance
         .collection("users")
         .doc(userId)
-        .update({"isPrivate": value}).whenComplete(() {
-      isPrivacy = value;
-
-      log(isPrivacy.toString());
-    });
+        .update({"isPrivate": value});
     log(isPrivacy.toString());
     emit(ChangePrivacyState());
   }
