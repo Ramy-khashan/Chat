@@ -8,6 +8,8 @@ class GroupChatInitial extends GroupChatState {}
 class GetUserDataState extends GroupChatState {}
 
 class ChangeGroupOptionsState extends GroupChatState {}
+class ChangeScrollControllerUpState extends GroupChatState {}
+class ChangeScrollControllerBottomState extends GroupChatState {}
 
 class GetGroupImageState extends GroupChatState {}
 

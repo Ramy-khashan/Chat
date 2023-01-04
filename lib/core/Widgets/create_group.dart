@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:chat/cubit/main_page_cubit/main_page_cubit.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../constant.dart';
 import 'bottom_sheet_head.dart';
@@ -30,17 +31,17 @@ createGroupModelSheet(
                   topRight: Radius.circular(20), topLeft: Radius.circular(20))),
           child: Column(
             children: [
-                                  BottomSheetHead(size: size, head: controller.isNextStepGroup
-                        ? "Enter Group Info"
-                        : "Choose Group Member",),
-
-            
+              BottomSheetHead(
+                size: size,
+                head: controller.isNextStepGroup
+                    ? "Enter Group Info"
+                    : "Choose Group Member",
+              ),
               controller.isNextStepGroup
                   ? Expanded(
                       child: SingleChildScrollView(
                         padding: const EdgeInsets.all(15),
-                        child: 
-                        Column(
+                        child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             TextField(
@@ -168,13 +169,21 @@ createGroupModelSheet(
                                           context, id);
                                     }
                                   : () {
-                                      log(controller.selectedConnections
-                                          .toString());
-                                      setState(() {
-                                        controller.isNextStepGroup = true;
-                                      });
-                                      log(controller.isNextStepGroup
-                                          .toString());
+                                      if (controller
+                                              .selectedConnections.length >
+                                          1) {
+                                        log(controller.selectedConnections
+                                            .toString());
+                                        setState(() {
+                                          controller.isNextStepGroup = true;
+                                        });
+                                        log(controller.isNextStepGroup
+                                            .toString());
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                "Chosse Frinds To Create Group");
+                                      }
                                     },
                               size: size,
                             ),

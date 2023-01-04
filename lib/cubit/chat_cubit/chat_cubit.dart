@@ -12,6 +12,7 @@ class ChatCubit extends Cubit<ChatState> {
   ChatCubit() : super(ChatInitial());
   static ChatCubit get(ctx) => BlocProvider.of(ctx);
   final messageController = TextEditingController();
+
   bool isClickingMsg = false;
   String docsId = "";
   String userImg = "";
@@ -22,6 +23,40 @@ class ChatCubit extends Cubit<ChatState> {
       userImg = value.getString(AppKeys.personalImageKey)!;
       emit(GetUserImageState());
     });
+  }
+  ScrollController? chatController;
+  bool isBottom = true;
+  initScrollController() {
+    chatController = ScrollController()
+      ..addListener(() {
+        if (chatController!.position.atEdge) {
+          bool isTop = chatController!.position.pixels == 0;
+          if (isTop) {
+            print("top");
+
+            isTop = true;
+          } else {
+            print("bottom");
+
+            isTop = false;
+
+          }
+        }
+        if (chatController!.position.pixels >
+                chatController!.position.minScrollExtent ||
+            chatController!.position.pixels >
+                chatController!.position.maxScrollExtent) {
+          print("between");
+
+          isBottom = false;
+    emit(ChangeScrollControllerUpState());
+
+        } else {
+          isBottom = true;
+    emit(ChangeScrollControllerBottomState());
+
+        }
+      }); 
   }
 
   showMessageTime() {

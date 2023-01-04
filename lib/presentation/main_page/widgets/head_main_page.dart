@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
- import '../../../core/Widgets/icon_button.dart';
-import '../../../core/Widgets/image_avatar.dart'; 
+import '../../../core/Widgets/icon_button.dart';
+import '../../../core/Widgets/image_avatar.dart';
 
 class HeadMainPageItem extends StatelessWidget {
   final Size size;
   final VoidCallback onTap;
+  final VoidCallback? onTapCreateGroup;
   final bool isOpenSearch;
+  final bool isNeedCreateOrder;
   final IconData icon;
   final String img;
   final TextEditingController? searchController;
@@ -22,7 +24,9 @@ class HeadMainPageItem extends StatelessWidget {
       required this.icon,
       required this.onEditProfile,
       required this.onTap,
-      required this.size})
+      required this.size,
+      this.onTapCreateGroup,
+      this.isNeedCreateOrder = false})
       : super(key: key);
 
   @override
@@ -34,7 +38,6 @@ class HeadMainPageItem extends StatelessWidget {
       child: Column(
         children: [
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
                 "Let's Chat\n with friends",
@@ -43,6 +46,14 @@ class HeadMainPageItem extends StatelessWidget {
                     fontSize: size.shortestSide * .06,
                     fontWeight: FontWeight.w700),
               ),
+              const Spacer(),
+              isNeedCreateOrder
+                  ? IconButtonItem(
+                      icon: Icons.group_add,
+                      onTap: onTapCreateGroup!,
+                      size: size)
+                  : const SizedBox.shrink(),
+                  SizedBox(width: size.shortestSide*.03),
               IconButtonItem(
                   icon: Icons.menu, onTap: onEditProfile, size: size),
             ],

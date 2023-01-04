@@ -22,6 +22,7 @@ dependencies:
   firebase_auth: 
   cloud_firestore: 
   fluttertoast: 
+  lottie:  
   clipboard:
   awesome_dialog: 
   firebase_storage: ^10.2.18

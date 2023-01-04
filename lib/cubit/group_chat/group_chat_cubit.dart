@@ -30,6 +30,41 @@ class GroupChatCubit extends Cubit<GroupChatState> {
 
   String? imageName;
   final picker = ImagePicker();
+    ScrollController? chatController;
+  bool isBottom = true;
+  initScrollController() {
+    chatController = ScrollController()
+      ..addListener(() {
+        if (chatController!.position.atEdge) {
+          bool isTop = chatController!.position.pixels == 0;
+          if (isTop) {
+            print("top");
+
+            isTop = true;
+          } else {
+            print("bottom");
+
+            isTop = false;
+
+          }
+        }
+        if (chatController!.position.pixels >
+                chatController!.position.minScrollExtent ||
+            chatController!.position.pixels >
+                chatController!.position.maxScrollExtent) {
+          print("between");
+
+          isBottom = false;
+    emit(ChangeScrollControllerUpState());
+
+        } else {
+          isBottom = true;
+    emit(ChangeScrollControllerBottomState());
+
+        }
+      }); 
+  }
+
   Future getGroupImage() async {
     try {
       XFile? value = await picker.pickImage(source: ImageSource.gallery);

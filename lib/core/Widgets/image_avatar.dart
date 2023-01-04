@@ -1,3 +1,4 @@
+import 'package:chat/core/constant.dart';
 import 'package:flutter/material.dart';
 
 class ImageAvatarItem extends StatelessWidget {
@@ -15,14 +16,29 @@ class ImageAvatarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CircleAvatar(
-      backgroundImage: img == ""
-          ? null
-          : NetworkImage(
-              img,
-            ),
-      radius: size.shortestSide * radius,
-      backgroundColor: bgColor,
+    return Container(
+      clipBehavior: Clip.antiAliasWithSaveLayer,
+      width: size.shortestSide * radius * 2,
+      decoration: const BoxDecoration(shape: BoxShape.circle),
+      child: Image.network(
+        img,
+          width: size.shortestSide * radius * 2,
+                fit: BoxFit.fill,
+        loadingBuilder: (context, child, c) {
+          if (c == null) return child;
+          return Image.asset(
+                "assets/image/user.jpeg",
+                width: size.shortestSide * radius * 2,
+                fit: BoxFit.fill,
+              );
+        },
+         errorBuilder: (context, child, error) => Image.asset(
+                "assets/image/user.jpeg",
+                width: size.shortestSide * radius * 2,
+                fit: BoxFit.fill,
+              )
+      ),
     );
+   
   }
-}
+} 

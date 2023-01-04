@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Color mainColor = Colors.blue.shade700;
+Color mainColor = const Color.fromARGB(255, 32, 129, 159).withOpacity(.7);
 BoxDecoration decoration = BoxDecoration(
     boxShadow: [
       BoxShadow(
@@ -8,4 +8,4 @@ BoxDecoration decoration = BoxDecoration(
     ],
     borderRadius: const BorderRadius.only(
         topLeft: Radius.circular(40), topRight: Radius.circular(40)),
-    color: Colors.white);
+    color: Colors.black);

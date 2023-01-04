@@ -4,6 +4,7 @@ import 'package:chat/core/constant.dart';
 import 'package:chat/cubit/edit_profile_cubit/edit_profile_cubit.dart';
 import 'package:chat/presentation/edit_profile/widgets/add_friend_by_id_item.dart';
 import 'package:chat/presentation/edit_profile/widgets/show_id.dart';
+import 'package:chat/presentation/main_page/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/Widgets/bottom_sheet_head.dart';
@@ -59,7 +60,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   BottomSheetHead(
                                       size: size, head: "Profile Options"),
                                   Padding(
-                                    padding:  EdgeInsets.only(left:size.shortestSide*.02,right: size.shortestSide*.02,bottom: size.shortestSide*.025),
+                                    padding: EdgeInsets.only(
+                                        left: size.shortestSide * .02,
+                                        right: size.shortestSide * .02,
+                                        bottom: size.shortestSide * .025),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
                                       children: [
@@ -69,7 +73,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             controller:
                                                 controller.friendIdController,
                                             onTap: () async {
-                                              await controller.addFriend(context);
+                                              await controller
+                                                  .addFriend(context);
                                               setState(() {});
                                             },
                                             size: size),
@@ -99,7 +104,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       },
                       icon: Icons.arrow_back,
                       onTap: () {
-                        Navigator.pop(context);
+                        Navigator.pushAndRemoveUntil(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MainPageScreen(
+                                      id: controller.userId,
+                                      isFromReg: false,
+                                    )),
+                            (route) => false);
                       },
                       size: size),
                   Expanded(
@@ -123,12 +135,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             },
                                             child: controller.imageFile == null
                                                 ? CircleAvatar(
-                                                    backgroundImage:
+                                                  
+                                                   backgroundImage: const AssetImage("assets/image/user.jpeg"),
+                                                   foregroundImage:
                                                         NetworkImage(
                                                             controller.image),
                                                     radius:
                                                         size.shortestSide * .16,
-                                                    backgroundColor: mainColor,
+                                                    backgroundColor: Colors.transparent,
                                                     child: Icon(
                                                       Icons.camera_alt,
                                                       color:
@@ -259,7 +273,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                               controller.logout(
                                                   context: context);
                                             },
-                                            color: Colors.red.shade800,
+                                            color: const Color.fromARGB(255, 120, 18, 47) ,
                                             head: "Log Out"),
                                       ),
                                     ],

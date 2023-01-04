@@ -11,7 +11,8 @@ import '../../chat/chat_page.dart';
 class ChatPartItem extends StatelessWidget {
   final Size size;
   final String id;
-  const ChatPartItem({Key? key, required this.size, required this.id}) : super(key: key);
+  const ChatPartItem({Key? key, required this.size, required this.id})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,50 +38,54 @@ class ChatPartItem extends StatelessWidget {
                   )
                 : ListView.builder(
                     physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) =>
-                        StreamBuilder<DocumentSnapshot>(
-                            stream: FirebaseFirestore.instance
-                                .collection("users")
-                                .doc(frinds[index])
-                                .snapshots(),
-                            builder: (context,
-                                AsyncSnapshot<DocumentSnapshot> snapshot) {
-                              if (snapshot.hasData) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ChatPageScreen(
-                                          mineId: id,
-                                          friendId: snapshot.data!.id,
-                                          friendImg: snapshot.data!.get("img"),
-                                          friendName:
-                                              snapshot.data!.get("name"),
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: Padding(
-                                      padding: EdgeInsets.only(
-                                        top: size.longestSide * .01,
-                                      ),
-                                      child: ListTile(
-                                        leading: ImageAvatarItem(
-                                          img: snapshot.data!.get("img"),
-                                          size: size,
-                                          bgColor: mainColor,
-                                          radius: .07,
-                                        ),
-                                        title: Text(snapshot.data!.get("name")),
-                                        // subtitle: const Text("Last Message"),
-                                        // trailing: const Text("date"),
-                                      )),
+                    itemBuilder: (context, index) => StreamBuilder<
+                            DocumentSnapshot>(
+                        stream: FirebaseFirestore.instance
+                            .collection("users")
+                            .doc(frinds[index])
+                            .snapshots(),
+                        builder: (context,
+                            AsyncSnapshot<DocumentSnapshot> snapshot) {
+                          if (snapshot.hasData) {
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ChatPageScreen(
+                                      mineId: id,
+                                      friendId: snapshot.data!.id,
+                                      friendImg: snapshot.data!.get("img"),
+                                      friendName: snapshot.data!.get("name"),
+                                    ),
+                                  ),
                                 );
-                              } else {
-                                return const SizedBox();
-                              }
-                            }),
+                              },
+                              child: Padding(
+                                  padding: EdgeInsets.only(
+                                    top: size.longestSide * .02,
+                                  ),
+                                  child: ListTile(
+                                    leading: ImageAvatarItem(
+                                      img: snapshot.data!.get("img"),
+                                      size: size,
+                                      bgColor: mainColor,
+                                      radius: .07,
+                                    ),
+                                    title: Text(
+                                      snapshot.data!.get("name"),
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: size.shortestSide * .05),
+                                    ),
+                                    // subtitle: const Text("Last Message"),
+                                    // trailing: const Text("date"),
+                                  )),
+                            );
+                          } else {
+                            return const SizedBox();
+                          }
+                        }),
                     itemCount:
                         List.from(snapshot.data!.get("connections")).length,
                   );

@@ -4,6 +4,7 @@ import 'package:chat/core/app_keys.dart';
 import 'package:chat/presentation/auth/auth_page.dart';
 import 'package:chat/presentation/main_page/main_page.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -27,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     getIsAuth();
-    Timer(const Duration(milliseconds: 1700), () {
+    Timer(const Duration(milliseconds:2500), () {
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) {
         if (auth == "yes") {
@@ -44,10 +45,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Colors.white,
+    return   Scaffold(
+      backgroundColor: Colors.black,
       body: Center(
-        child: Text("Chat"),
+        child:Lottie.asset('assets/image/chat.json'),
+
       ),
     );
   }

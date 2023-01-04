@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+ 
 import 'package:chat/core/Widgets/create_group.dart';
 import 'package:chat/presentation/group_chat/view/group_chat_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -103,20 +102,26 @@ class _GroupPartItemState extends State<GroupPartItem>
                                             .get("group_img")),
                                   ));
                             },
-                            child: ListTile(
-                                leading: ImageAvatarItem(
-                                  img: snapshot.data!.docs[index]
-                                      .get("group_img"),
-                                  size: size,
-                                  bgColor: mainColor,
-                                  radius: .07,
-                                ),
-                                title: Text(
-                                  snapshot.data!.docs[index].get("group_name"),
-                                  style: TextStyle(
-                                      fontSize: size.shortestSide * .055,
-                                      fontWeight: FontWeight.w500),
-                                )),
+                            child: Padding(
+                               padding: EdgeInsets.only(
+                                    top: size.longestSide * .02,
+                                  ),
+                              child: ListTile(
+                                  leading: ImageAvatarItem(
+                                    img: snapshot.data!.docs[index]
+                                        .get("group_img"),
+                                    size: size,
+                                    bgColor: mainColor,
+                                    radius: .07,
+                                  ),
+                                  title: Text(
+                                    snapshot.data!.docs[index].get("group_name"),
+                                    style: TextStyle(
+                                        fontSize: size.shortestSide * .05 ,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  )),
+                            ),
                           ),
                         ),
                         itemCount: snapshot.data!.docs.length,

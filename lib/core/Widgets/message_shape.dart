@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
  
-import 'image_avatar.dart';
 import '../constant.dart';
 
 class MessageShapeItem extends StatelessWidget {
@@ -34,21 +33,21 @@ class MessageShapeItem extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ImageAvatarItem(
-              size: size,
-              img: isMyMsg ? senderImage : reciverImage,
-              bgColor: isMyMsg ? mainColor : Colors.grey.shade300,
-              radius: .05,
-            ),
+            // ImageAvatarItem(
+            //   size: size,
+            //   img: isMyMsg ? senderImage : reciverImage,
+            //   bgColor: isMyMsg ? mainColor : Colors.grey.shade300,
+            //   radius: .05,
+            // ),
             Expanded(
-              flex: message.length>20?1:0,
+              flex: message.length > 20 ? 1 : 0,
               child: Container(
                 margin: EdgeInsets.only(
                     left: size.shortestSide * .01,
                     right: size.shortestSide * .01),
                 padding: EdgeInsets.symmetric(
-                    horizontal: size.shortestSide * .03,
-                    vertical: size.longestSide * .01),
+                    horizontal: size.shortestSide * .035,
+                    vertical: size.longestSide * .013),
                 decoration: BoxDecoration(
                   color: isMyMsg ? mainColor : Colors.grey.shade300,
                   borderRadius: BorderRadius.only(
@@ -66,13 +65,10 @@ class MessageShapeItem extends StatelessWidget {
                       message.trim(),
                       overflow: TextOverflow.clip,
                       style: TextStyle(
-                        fontSize: size.shortestSide*.042,
-                    
+                        fontSize: size.shortestSide * .042,
                         color: isMyMsg ? Colors.white : Colors.black,
                       ),
                     ),
-                  
-                    
                   ],
                 ),
               ),
