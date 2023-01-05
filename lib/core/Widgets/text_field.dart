@@ -34,6 +34,7 @@ class TextFieldItem extends StatelessWidget {
           Text(
             head,
             style: TextStyle(
+              color: Colors.white,
                 fontSize: size.shortestSide * .05, fontWeight: FontWeight.w600),
           ),
           SizedBox(height: size.longestSide * .01),
@@ -41,9 +42,14 @@ class TextFieldItem extends StatelessWidget {
             validator: (valid) => onValid(valid!),
             controller: controller,
             obscureText: isPassword ? isSecure : false,
+          style: const TextStyle(color: Colors.white),
             decoration: InputDecoration(
               hintText: hint,
+              
               border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: const BorderSide(color: Colors.grey),
+              ), enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8),
                 borderSide: const BorderSide(color: Colors.grey),
               ),
@@ -51,7 +57,7 @@ class TextFieldItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 borderSide: BorderSide(color: mainColor, width: 1),
               ),
-              prefixIcon: Icon(icon),
+              prefixIcon: Icon(icon,color: Colors.grey,),
               suffixIcon: isPassword
                   ? IconButton(
                       onPressed: onSeePassword,

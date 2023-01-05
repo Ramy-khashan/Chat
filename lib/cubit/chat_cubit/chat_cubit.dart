@@ -32,11 +32,11 @@ class ChatCubit extends Cubit<ChatState> {
         if (chatController!.position.atEdge) {
           bool isTop = chatController!.position.pixels == 0;
           if (isTop) {
-            print("top");
+            
 
             isTop = true;
           } else {
-            print("bottom");
+            
 
             isTop = false;
 
@@ -46,8 +46,7 @@ class ChatCubit extends Cubit<ChatState> {
                 chatController!.position.minScrollExtent ||
             chatController!.position.pixels >
                 chatController!.position.maxScrollExtent) {
-          print("between");
-
+       
           isBottom = false;
     emit(ChangeScrollControllerUpState());
 
@@ -108,7 +107,7 @@ class ChatCubit extends Cubit<ChatState> {
   String tag = "123";
   bool show = false;
   showFriendImage(frindId) {
-    Future.delayed(Duration(milliseconds: 500));
+    Future.delayed(const Duration(milliseconds: 500));
     show = !show;
     tag = frindId;
     emit(ShowFriendImageState());

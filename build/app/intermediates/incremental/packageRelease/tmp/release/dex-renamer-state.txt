@@ -1,4 +1,4 @@
-#Thu Dec 29 01:31:09 EET 2022
+#Wed Jan 04 20:55:41 EET 2023
 base.0=H\:\\Mine work\\Flutter Coures\\app in progress\\chat\\build\\app\\intermediates\\dex\\release\\minifyReleaseWithR8\\classes.dex
 renamed.0=classes.dex
 path.0=classes.dex

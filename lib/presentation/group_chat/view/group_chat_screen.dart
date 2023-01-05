@@ -140,7 +140,7 @@ class GroupChatScreen extends StatelessWidget {
                           child: const Icon(Icons.keyboard_arrow_down_rounded),
                         ),
                       )
-                    : SizedBox.shrink()
+                    : const SizedBox.shrink()
               ],
             );
           },

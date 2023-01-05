@@ -234,6 +234,10 @@ provider
 2.12
 file:///C:/src/flutter1/.pub-cache/hosted/pub.dartlang.org/provider-6.0.3/
 file:///C:/src/flutter1/.pub-cache/hosted/pub.dartlang.org/provider-6.0.3/lib/
+regexpattern
+2.12
+file:///C:/src/flutter1/.pub-cache/hosted/pub.dartlang.org/regexpattern-2.1.0/
+file:///C:/src/flutter1/.pub-cache/hosted/pub.dartlang.org/regexpattern-2.1.0/lib/
 shared_preferences
 2.14
 file:///C:/src/flutter1/.pub-cache/hosted/pub.dartlang.org/shared_preferences-2.0.15/

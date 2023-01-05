@@ -23,6 +23,7 @@ dependencies:
   cloud_firestore: 
   fluttertoast: 
   lottie:  
+  regexpattern: ^2.1.0
   clipboard:
   awesome_dialog: 
   firebase_storage: ^10.2.18

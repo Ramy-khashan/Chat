@@ -1,3 +1,4 @@
+import 'package:regexpattern/regexpattern.dart';
 import 'package:chat/core/Widgets/button.dart';
 import 'package:chat/core/Widgets/loading.dart';
  import 'package:flutter/material.dart';
@@ -36,9 +37,11 @@ class SignUpScreen extends StatelessWidget {
                     isSecure: false,
                     hint: "Enter your username",
                     onValid: (val) {
+ 
                       if (val.isEmpty) {
                         return "This field must fill";
-                      } else if (controller.usernameController.text.length >
+                      }
+                       else if (controller.usernameController.text.length >
                           20) {
                         return "user name must less than 20 charchter";
                       }
@@ -54,6 +57,10 @@ class SignUpScreen extends StatelessWidget {
                     isSecure: false,
                     hint: "Enter your email",
                     onValid: (val) {
+                      
+                      if (val.isEmail()) {
+                        return "Enter Email In Correct Form";
+                      }
                       if (val.isEmpty) {
                         return "This field must fill";
                       }
@@ -71,6 +78,10 @@ class SignUpScreen extends StatelessWidget {
                     isSecure: controller.isSecure,
                     hint: "Enter your password",
                     onValid: (val) {
+                      
+                      if (val.isPasswordNormal2()) {
+                        return "Enter Password In Correct Form";
+                      }
                       if (val.isEmpty) {
                         return "This field must fill";
                       }
@@ -88,6 +99,10 @@ class SignUpScreen extends StatelessWidget {
                     isSecure: controller.isSecureConfirmPass,
                     hint: "Re-Enter password",
                     onValid: (val) {
+                      
+                     if (val.isPasswordNormal2()) {
+                        return "Enter Password In Correct Form";
+                      }
                       if (val.isEmpty) {
                         return "This field must fill";
                       } else if (controller.passwordController.text !=

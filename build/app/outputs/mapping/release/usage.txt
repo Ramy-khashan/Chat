@@ -4403,13 +4403,13 @@ com.google.android.gms.common.data.DataBufferObserver
 com.google.common.cache.LocalCache$Strength$3
 com.google.protobuf.Field$Cardinality$CardinalityVerifier
 com.google.android.gms.common.api.internal.zaam
+kotlinx.coroutines.flow.FlowKt__CountKt
 kotlinx.coroutines.internal.DispatchedContinuationKt:
     private static synthetic void getUNDEFINED$annotations()
     public static synthetic void getREUSABLE_CLAIMED$annotations()
     public static final boolean yieldUndispatched(kotlinx.coroutines.internal.DispatchedContinuation)
     private static final boolean executeUnconfined(kotlinx.coroutines.internal.DispatchedContinuation,java.lang.Object,int,boolean,kotlin.jvm.functions.Function0)
     static synthetic boolean executeUnconfined$default(kotlinx.coroutines.internal.DispatchedContinuation,java.lang.Object,int,boolean,kotlin.jvm.functions.Function0,int,java.lang.Object)
-kotlinx.coroutines.flow.FlowKt__CountKt
 androidx.annotation.RequiresOptIn$Level
 kotlinx.coroutines.debug.internal.DebugCoroutineInfoImpl$yieldFrames$1
 kotlinx.coroutines.CompletableJob:
@@ -8630,6 +8630,7 @@ com.google.api.Billing
 com.google.common.collect.MapMakerInternalMap$WeakValueEntry
 io.grpc.InternalConfigSelector$Result$Builder:
     public io.grpc.InternalConfigSelector$Result$Builder setInterceptor(io.grpc.ClientInterceptor)
+androidx.core.view.ScaleGestureDetectorCompat
 androidx.core.view.ViewGroupCompat:
     private void <init>()
     public static boolean onRequestSendAccessibilityEvent(android.view.ViewGroup,android.view.View,android.view.accessibility.AccessibilityEvent)
@@ -8640,7 +8641,6 @@ androidx.core.view.ViewGroupCompat:
     public static int getNestedScrollAxes(android.view.ViewGroup)
     public static final int LAYOUT_MODE_CLIP_BOUNDS
     public static final int LAYOUT_MODE_OPTICAL_BOUNDS
-androidx.core.view.ScaleGestureDetectorCompat
 androidx.core.app.NotificationCompat$CarExtender
 org.checkerframework.checker.nullness.compatqual.KeyForDecl
 com.google.common.collect.AbstractMapBasedMultimap$WrappedList
@@ -10798,9 +10798,9 @@ com.google.common.primitives.Shorts$ShortConverter
 com.google.common.collect.Table
 com.google.common.util.concurrent.Striped$2
 kotlinx.coroutines.flow.FlowKt__EmittersKt$transform$1$invokeSuspend$$inlined$collect$1
-androidx.annotation.CallSuper
 androidx.core.util.AtomicFile
 com.google.android.gms.common.data.EntityBuffer
+androidx.annotation.CallSuper
 com.google.common.collect.ObjectCountHashMap$MapEntry
 kotlinx.coroutines.flow.internal.CombineKt$combineInternal$2$1$invokeSuspend$$inlined$collect$1$1
 com.google.protobuf.AbstractMessageLite$Builder$LimitedInputStream
@@ -22342,8 +22342,8 @@ okio.BufferedSink:
 com.google.apphosting.datastore.testing.DatastoreTestTrace$FirestoreV1Action$Listen$Builder
 kotlin.collections.unsigned.UArraysKt___UArraysJvmKt$asList$1
 io.grpc.TlsServerCredentials$Builder
-com.google.common.cache.CacheBuilder
 com.google.common.collect.MapMakerInternalMap$DummyInternalEntry
+com.google.common.cache.CacheBuilder
 androidx.core.app.ActivityOptionsCompat$Api23Impl
 kotlin.comparisons.ComparisonsKt__ComparisonsKt:
     public static final varargs int compareValuesBy(java.lang.Object,java.lang.Object,kotlin.jvm.functions.Function1[])
@@ -23350,10 +23350,10 @@ io.grpc.ClientInterceptors:
     static synthetic io.grpc.ClientCall access$100()
 io.flutter.plugin.common.PluginRegistry
 com.google.common.collect.Synchronized$SynchronizedMultiset
-androidx.core.view.-$$Lambda$ViewCompat$wxf3s7r4ODqhaNnVVlzx9IRcwjg:
-    public final androidx.core.view.ContentInfoCompat onReceiveContent(androidx.core.view.ContentInfoCompat)
 com.google.firebase.firestore.auth.-$$Lambda$FirebaseAppCheckTokenProvider$hu48mr03bfT6X2LDSOXJket2KbA:
     public final void onAppCheckTokenChanged(com.google.firebase.appcheck.AppCheckTokenResult)
+androidx.core.view.-$$Lambda$ViewCompat$wxf3s7r4ODqhaNnVVlzx9IRcwjg:
+    public final androidx.core.view.ContentInfoCompat onReceiveContent(androidx.core.view.ContentInfoCompat)
 kotlinx.coroutines.scheduling.ExperimentalCoroutineDispatcher:
     public void close()
     public java.lang.String toString()
@@ -24384,7 +24384,7 @@ kotlin.KotlinVersion:
     public static final kotlin.KotlinVersion$Companion Companion
 io.grpc.ClientInterceptors:
     private static final io.grpc.ClientCall NOOP_CALL
+io.flutter.view.TextureRegistry$SurfaceTextureEntry$-CC
+io.flutter.plugin.platform.PlatformView$-CC
 io.flutter.plugin.common.BinaryMessenger$-CC
 androidx.lifecycle.DefaultLifecycleObserver$-CC
-io.flutter.plugin.platform.PlatformView$-CC
-io.flutter.view.TextureRegistry$SurfaceTextureEntry$-CC

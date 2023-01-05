@@ -1,8 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:chat/core/app_keys.dart';
-import 'package:chat/presentation/group_chat/view/group_chat_screen.dart';
+import 'package:chat/core/app_keys.dart'; 
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as path;
 import 'dart:math' as math;
@@ -38,12 +37,10 @@ class GroupChatCubit extends Cubit<GroupChatState> {
         if (chatController!.position.atEdge) {
           bool isTop = chatController!.position.pixels == 0;
           if (isTop) {
-            print("top");
-
+           
             isTop = true;
           } else {
-            print("bottom");
-
+         
             isTop = false;
 
           }
@@ -52,8 +49,6 @@ class GroupChatCubit extends Cubit<GroupChatState> {
                 chatController!.position.minScrollExtent ||
             chatController!.position.pixels >
                 chatController!.position.maxScrollExtent) {
-          print("between");
-
           isBottom = false;
     emit(ChangeScrollControllerUpState());
 
@@ -198,7 +193,7 @@ class GroupChatCubit extends Cubit<GroupChatState> {
                         title: Text(snapshot.data!.get("name")),
                       );
                     } else {
-                      return SizedBox();
+                      return const SizedBox();
                     }
                   },
                 ),

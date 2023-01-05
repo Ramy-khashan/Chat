@@ -1,4 +1,4 @@
-import 'package:chat/core/constant.dart';
+ 
 import 'package:flutter/material.dart';
 
 class ImageAvatarItem extends StatelessWidget {

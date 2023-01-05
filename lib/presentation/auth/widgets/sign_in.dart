@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:regexpattern/regexpattern.dart';
 import '../../../core/Widgets/button.dart';
 import '../../../core/Widgets/loading.dart';
 import '../../../core/Widgets/text_field.dart';
@@ -36,10 +36,14 @@ class SignInScreen extends StatelessWidget {
                     isPassword: false,
                     isSecure: false,
                     hint: "Enter your email",
-                    onValid: (val) {
+                    onValid: (String val) {
+                      if (val.isEmail()) {
+                        return "Enter Email In Correct Form";
+                      }
                       if (val.isEmpty) {
                         return "This field must fill";
                       }
+                      return null;
                     },
                     size: size,
                     head: "Email",
@@ -57,6 +61,7 @@ class SignInScreen extends StatelessWidget {
                       if (val.isEmpty) {
                         return "This field must fill";
                       }
+                      return "";
                     },
                     size: size,
                     head: "Password",
