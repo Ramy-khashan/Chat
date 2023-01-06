@@ -113,6 +113,7 @@ class SignUpScreen extends StatelessWidget {
                     size: size,
                     head: "Confirm Password",
                   ),
+                     SizedBox(height:  size.longestSide * .02,) ,
                   controller.isLoading
                       ? const LoadingItem()
                       : ButtonITem(

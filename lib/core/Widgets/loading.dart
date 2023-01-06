@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:chat/core/constant.dart';
 import 'package:flutter/material.dart';
 
 class LoadingItem extends StatelessWidget {
@@ -5,8 +8,12 @@ class LoadingItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator.adaptive(),
+    return Center(
+      child: Platform.isAndroid
+          ? CircularProgressIndicator(
+              color: mainColor,
+            )
+          : const CircularProgressIndicator.adaptive(),
     );
   }
 }

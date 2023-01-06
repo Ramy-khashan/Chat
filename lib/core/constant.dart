@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Color mainColor = const Color.fromARGB(255, 32, 129, 159).withOpacity(.7);
+Color mainColor = Color.fromARGB(255, 38, 165, 204).withOpacity(.7);
 BoxDecoration decoration = BoxDecoration(
     boxShadow: [
       BoxShadow(

@@ -12,7 +12,8 @@ class ChatCubit extends Cubit<ChatState> {
   ChatCubit() : super(ChatInitial());
   static ChatCubit get(ctx) => BlocProvider.of(ctx);
   final messageController = TextEditingController();
-
+  bool isEmoji = false;
+  bool isdisable = false;
   bool isClickingMsg = false;
   String docsId = "";
   String userImg = "";
@@ -24,6 +25,29 @@ class ChatCubit extends Cubit<ChatState> {
       emit(GetUserImageState());
     });
   }
+
+  systemBackButton() {
+    if (isdisable == true) {
+      isdisable = false;
+      isEmoji = false;
+      emit(ChangeSystemNavigatorState());
+
+      return false;
+    } else {
+      return true;
+    }
+  }
+
+  setEmoji() {
+    isdisable = !isdisable;
+
+    isEmoji = !isEmoji;
+    if (!isdisable) {
+      messageController;
+    }
+    emit(ChangeEmojiState());
+  }
+
   ScrollController? chatController;
   bool isBottom = true;
   initScrollController() {
@@ -32,30 +56,22 @@ class ChatCubit extends Cubit<ChatState> {
         if (chatController!.position.atEdge) {
           bool isTop = chatController!.position.pixels == 0;
           if (isTop) {
-            
-
             isTop = true;
           } else {
-            
-
             isTop = false;
-
           }
         }
         if (chatController!.position.pixels >
                 chatController!.position.minScrollExtent ||
             chatController!.position.pixels >
                 chatController!.position.maxScrollExtent) {
-       
           isBottom = false;
-    emit(ChangeScrollControllerUpState());
-
+          emit(ChangeScrollControllerUpState());
         } else {
           isBottom = true;
-    emit(ChangeScrollControllerBottomState());
-
+          emit(ChangeScrollControllerBottomState());
         }
-      }); 
+      });
   }
 
   showMessageTime() {

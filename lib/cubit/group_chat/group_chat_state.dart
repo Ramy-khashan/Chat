@@ -12,8 +12,10 @@ class ChangeScrollControllerUpState extends GroupChatState {}
 class ChangeScrollControllerBottomState extends GroupChatState {}
 
 class GetGroupImageState extends GroupChatState {}
+class ChangeSystemNavigatorState extends GroupChatState {}
 
 class GetGroupDataState extends GroupChatState {}
+class ChangeEmojiState extends GroupChatState {}
 
 class ChangeGroupInfoSuccessfullyState extends GroupChatState {
   final String head;

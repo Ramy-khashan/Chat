@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../core/constant.dart';
 import 'widgets/sign_in.dart';
 import 'widgets/sign_up.dart';
@@ -11,7 +10,6 @@ class AuthScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      // resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

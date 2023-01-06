@@ -1,7 +1,7 @@
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:chat/core/app_keys.dart'; 
+import 'package:chat/core/app_keys.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as path;
 import 'dart:math' as math;
@@ -19,6 +19,18 @@ class GroupChatCubit extends Cubit<GroupChatState> {
   static GroupChatCubit get(context) => BlocProvider.of(context);
   final groupChatController = TextEditingController();
   String image = "";
+  bool isdisable = false;
+  systemBackButton() {
+    if (isdisable == true) {
+      isdisable = false;
+      isEmoji = false;
+      emit(ChangeSystemNavigatorState());
+
+      return false;
+    } else {
+      return true;
+    }
+  }
 
   final groupNewMembereController = TextEditingController();
   final groupNameController = TextEditingController();
@@ -29,7 +41,7 @@ class GroupChatCubit extends Cubit<GroupChatState> {
 
   String? imageName;
   final picker = ImagePicker();
-    ScrollController? chatController;
+  ScrollController? chatController;
   bool isBottom = true;
   initScrollController() {
     chatController = ScrollController()
@@ -37,12 +49,9 @@ class GroupChatCubit extends Cubit<GroupChatState> {
         if (chatController!.position.atEdge) {
           bool isTop = chatController!.position.pixels == 0;
           if (isTop) {
-           
             isTop = true;
           } else {
-         
             isTop = false;
-
           }
         }
         if (chatController!.position.pixels >
@@ -50,14 +59,12 @@ class GroupChatCubit extends Cubit<GroupChatState> {
             chatController!.position.pixels >
                 chatController!.position.maxScrollExtent) {
           isBottom = false;
-    emit(ChangeScrollControllerUpState());
-
+          emit(ChangeScrollControllerUpState());
         } else {
           isBottom = true;
-    emit(ChangeScrollControllerBottomState());
-
+          emit(ChangeScrollControllerBottomState());
         }
-      }); 
+      });
   }
 
   Future getGroupImage() async {
@@ -94,7 +101,7 @@ class GroupChatCubit extends Cubit<GroupChatState> {
     log(groupNameController.text);
     log(img);
     log(id);
-   await FirebaseFirestore.instance.collection("group").doc(id).update({
+    await FirebaseFirestore.instance.collection("group").doc(id).update({
       "group_name": groupNameController.text.trim().isEmpty
           ? groupName
           : groupNameController.text.trim(),
@@ -102,35 +109,30 @@ class GroupChatCubit extends Cubit<GroupChatState> {
     }).whenComplete(() {
       groupImage = img;
       groupName = groupNameController.text.trim().isEmpty
-      
           ? groupName
           : groupNameController.text.trim();
-          emit(ChangeGroupInfoSuccessfullyState(img: groupImage,head: groupName));
+      emit(ChangeGroupInfoSuccessfullyState(img: groupImage, head: groupName));
       log(groupImage);
       log(groupName);
       groupNameController.clear();
       imageFile = null;
       imageName = "";
       image = "";
-    
+
       Fluttertoast.showToast(msg: "Save Update");
       Navigator.pop(context);
-
-      // Navigator.(
-      //     context,
-      //     MaterialPageRoute(
-      //       builder: (context) => GroupChatScreen(
-      //           groupId: groupId,
-      //           groupName: groupName,
-      //           groupImage: groupImage,
-      //           userId: userId,
-      //           groupMember: groupMember),
-      //     ));
     }).onError<FirebaseException>((error, stackTrace) {
       Fluttertoast.showToast(msg: error.message!);
     });
-            
+  }
 
+  bool isEmoji = false;
+  setEmoji() {
+    isdisable = !isdisable;
+
+    isEmoji = !isEmoji;
+
+    emit(ChangeEmojiState());
   }
 
   goGroupOptions() {

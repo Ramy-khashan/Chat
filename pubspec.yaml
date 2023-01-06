@@ -23,6 +23,7 @@ dependencies:
   cloud_firestore: 
   fluttertoast: 
   lottie:  
+  emoji_picker_flutter: ^1.5.1
   regexpattern: ^2.1.0
   clipboard:
   awesome_dialog: 
@@ -41,8 +42,7 @@ flutter:
 
   assets:
     - assets/image/
-  #   - images/a_dot_ham.jpeg
-
+ 
 
   # fonts:
   #   - family: Schyler

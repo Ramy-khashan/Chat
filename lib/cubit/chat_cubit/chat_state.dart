@@ -10,4 +10,6 @@ class FaildGetChatIdState extends ChatState {}
 class ShowMsgTimeState extends ChatState {}
 class ShowFriendImageState extends ChatState {}
 class ChangeScrollControllerBottomState extends ChatState {}
+class ChangeEmojiState extends ChatState {}
 class ChangeScrollControllerUpState extends ChatState {}
+class ChangeSystemNavigatorState extends ChatState {}

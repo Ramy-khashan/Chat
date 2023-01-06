@@ -273,7 +273,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                               controller.logout(
                                                   context: context);
                                             },
-                                            color: const Color.fromARGB(255, 120, 18, 47) ,
+                                            color: Color.fromARGB(255, 193, 33, 78) ,
                                             head: "Log Out"),
                                       ),
                                     ],

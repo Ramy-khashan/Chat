@@ -37,9 +37,7 @@ class SignInScreen extends StatelessWidget {
                     isSecure: false,
                     hint: "Enter your email",
                     onValid: (String val) {
-                      if (val.isEmail()) {
-                        return "Enter Email In Correct Form";
-                      }
+                    
                       if (val.isEmpty) {
                         return "This field must fill";
                       }
@@ -61,11 +59,12 @@ class SignInScreen extends StatelessWidget {
                       if (val.isEmpty) {
                         return "This field must fill";
                       }
-                      return "";
+                         return null;
                     },
                     size: size,
                     head: "Password",
                   ),
+                   SizedBox(height:  size.longestSide * .02,) ,
                   controller.isLoading
                       ? const LoadingItem()
                       : ButtonITem(
