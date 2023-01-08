@@ -14,7 +14,8 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+   {
   late SharedPreferences preferences;
   late String auth;
   late String id;
@@ -24,11 +25,11 @@ class _SplashScreenState extends State<SplashScreen> {
     id = preferences.get(AppKeys.userId).toString();
     setState(() {});
   }
-
+ 
   @override
   void initState() {
     getIsAuth();
-    Timer(const Duration(milliseconds:2500), () {
+    Timer(const Duration(milliseconds: 2500), () {
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) {
         if (auth == "yes") {
@@ -45,11 +46,10 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return   Scaffold(
+    return Scaffold(
       backgroundColor: Colors.black,
       body: Center(
-        child:Lottie.asset('assets/image/chat.json'),
-
+        child: Lottie.asset('assets/image/chat.json'),
       ),
     );
   }

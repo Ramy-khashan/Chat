@@ -7,7 +7,10 @@ class ChatTextFieldItem extends StatelessWidget {
   final bool isEmoji;
   final bool isdisable;
   final VoidCallback onSendMessage;
+  final Function(dynamic val) onChange;
   final VoidCallback onTapEmoij;
+  final VoidCallback onClickLike;
+  final bool isEmpty;
   final TextEditingController messageController;
   const ChatTextFieldItem({
     Key? key,
@@ -15,7 +18,10 @@ class ChatTextFieldItem extends StatelessWidget {
     required this.size,
     required this.messageController,
     required this.onTapEmoij,
-    required this.isEmoji, required this.isdisable,
+    required this.isEmoji,
+    required this.isdisable,
+    required this.onChange,
+    required this.onClickLike, required this.isEmpty,
   }) : super(key: key);
 
   @override
@@ -25,9 +31,14 @@ class ChatTextFieldItem extends StatelessWidget {
         bottom: size.longestSide * .01,
       ),
       child: Row(
-        children: [ IconButton(
-                      onPressed: onTapEmoij,
-                      icon:   Icon(isEmoji?Icons.keyboard:Icons.emoji_emotions,color:mainColor,size: size.shortestSide*.08,)),
+        children: [
+          IconButton(
+              onPressed: onTapEmoij,
+              icon: Icon(
+                isEmoji ? Icons.keyboard : Icons.emoji_emotions,
+                color: mainColor,
+                size: size.shortestSide * .08,
+              )),
           Expanded(
             child: Container(
               decoration: BoxDecoration(
@@ -40,14 +51,13 @@ class ChatTextFieldItem extends StatelessWidget {
                         offset: const Offset(2, 2))
                   ]),
               child: TextField(
-                
+                onChanged: onChange,
                 controller: messageController,
                 decoration: InputDecoration(
-                enabled: !isdisable,
+                  enabled: !isdisable,
                   hintText: "Write your message....",
                   filled: true,
                   fillColor: Colors.white,
-                 
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
                       borderSide: BorderSide.none),
@@ -61,14 +71,21 @@ class ChatTextFieldItem extends StatelessWidget {
           SizedBox(
             width: size.shortestSide * .025,
           ),
-          IconButton(
-            onPressed: onSendMessage,
-            icon: Icon(
-              Icons.send,
-              size: size.shortestSide * .08,
-              color: mainColor.withOpacity(.7),
-            ),
-          )
+        isEmpty
+              ? InkWell(
+                  onTap: onClickLike,
+                  child: Image.asset(
+                    "assets/image/like.png",
+                    width: size.shortestSide * .1,
+                  ))
+              : IconButton(
+                  onPressed: onSendMessage,
+                  icon: Icon(
+                    Icons.send,
+                    size: size.shortestSide * .08,
+                    color: mainColor.withOpacity(.7),
+                  ),
+                )
         ],
       ),
     );

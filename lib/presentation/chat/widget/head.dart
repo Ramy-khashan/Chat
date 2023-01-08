@@ -8,12 +8,17 @@ class ChatHeadItem extends StatelessWidget {
   final String friendImg;
   final String tag;
   final String friendName;
+  final bool status;
+
   final Function() onTap;
   const ChatHeadItem(
       {Key? key,
       required this.size,
       required this.friendImg,
-      required this.friendName, required this.onTap, required this.tag})
+      required this.friendName,
+      required this.onTap,
+      required this.tag,
+      required this.status})
       : super(key: key);
 
   @override
@@ -34,17 +39,29 @@ class ChatHeadItem extends StatelessWidget {
             bgColor: Colors.transparent,
           ),
           const Spacer(),
-          InkWell(
-            onTap: onTap,
-            child: Hero(
-              tag:tag,
-              child: ImageAvatarItem(
-                size: size,
-                img: friendImg,
-                bgColor: Colors.white,
-                radius: .065,
+          Stack(
+            children: [
+              InkWell(
+                onTap: onTap,
+                child: Hero(
+                  tag: tag,
+                  child: ImageAvatarItem(
+                    size: size,
+                    img: friendImg,
+                    bgColor: Colors.white,
+                    radius: .065,
+                  ),
+                ),
               ),
-            ),
+              Positioned(
+                right: 0,
+                bottom: 6,
+                child: CircleAvatar(
+                  backgroundColor: status ? Colors.green : Colors.grey.shade500,
+                  radius: size.shortestSide * .02,
+                ),
+              )
+            ],
           ),
           SizedBox(width: size.shortestSide * .035),
           Text(

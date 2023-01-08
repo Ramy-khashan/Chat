@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../presentation/main_page/models/users_model.dart';
 import 'main_page_state.dart';
 
 class MainPageCubit extends Cubit<MainPageState> {
@@ -98,48 +99,47 @@ class MainPageCubit extends Cubit<MainPageState> {
       log(e.toString());
     }
   }
-bool isLodingGroupData=false;
- Future uplodingImage(context,id) async {
+
+  bool isLodingGroupData = false;
+  Future uplodingImage(context, id) async {
     log(imageName!);
     var ref = FirebaseStorage.instance.ref("GroupImage/$imageName");
     log("Enter2");
     await ref.putFile(
       File(imageFile!.path),
     );
-    await ref.getDownloadURL().then((value)async{
+    await ref.getDownloadURL().then((value) async {
       image = value;
-     await createGroup(context,image,id);
+      await createGroup(context, image, id);
     }).onError<FirebaseException>((error, stackTrace) {
-      isLodingGroupData=false;
+      isLodingGroupData = false;
       Fluttertoast.showToast(msg: error.message!);
     });
   }
-  
 
   List connections = [];
   List connectionsChecks = [];
   List selectedConnections = [];
 
-  Future createGroup(context,img,id) async{
-   await FirebaseFirestore.instance.collection("group").add({
+  Future createGroup(context, img, id) async {
+    await FirebaseFirestore.instance.collection("group").add({
       "users": selectedConnections,
       "group_name": groupNameController.value.text.trim(),
       "group_img": img,
-      "admin":id
+      "admin": id
     }).then((value) {
       FirebaseFirestore.instance
           .collection("group")
           .doc(value.id)
           .update({"group_id": value.id}).whenComplete(() {
-     isLodingGroupData=false;
+        isLodingGroupData = false;
 
         Fluttertoast.showToast(msg: "Group Created Successfully");
         Navigator.pop(context);
       }).onError<FirebaseException>((error, stackTrace) {
-     isLodingGroupData=false;
+        isLodingGroupData = false;
 
         Fluttertoast.showToast(
-          
             msg: error.message ?? "Something went wrong, Check your network");
       });
     });
@@ -168,4 +168,21 @@ bool isLodingGroupData=false;
       selectedConnections.remove(connections[index]);
     }
   }
+
+ 
+    getChatId({required String mineId, required String friendId}) async {
+    await FirebaseFirestore.instance.collection("chats").get().then((value) {
+      for (var element in value.docs) {
+        List connectons = List.from(element.get("users"));
+        log(connectons.toString());
+        if (connectons.contains(mineId) && connectons.contains(friendId)) {
+          return element;
+          
+        }
+      }
+    });
+    emit(GetLastMsgState());
+  }
+
+  // List<UserModel> users = [];
 }

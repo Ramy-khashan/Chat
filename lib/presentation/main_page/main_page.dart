@@ -4,6 +4,7 @@ import 'package:chat/presentation/main_page/widgets/chat_part.dart';
 import 'package:chat/presentation/main_page/widgets/group_part_item.dart';
 import 'package:chat/presentation/main_page/widgets/head_main_page.dart';
 import 'package:chat/presentation/main_page/widgets/search_section.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -22,10 +23,31 @@ class MainPageScreen extends StatefulWidget {
 }
 
 class _MainPageScreenState extends State<MainPageScreen>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, WidgetsBindingObserver {
   late AnimationController sheetController;
+
+  void setStatus(bool status) async {
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(widget.id)
+        .update({"status": status});
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // online
+      setStatus(true);
+    } else {
+      // offline
+      setStatus(false);
+    }
+  }
+
   @override
   void initState() {
+    WidgetsBinding.instance.addObserver(this);
+    setStatus(true);
     sheetController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 600),
@@ -93,13 +115,13 @@ class _MainPageScreenState extends State<MainPageScreen>
                             : Column(
                                 children: [
                                   TabBar(
-                                      indicatorColor: const Color.fromARGB(255, 119, 204, 230)
+                                      indicatorColor: const Color.fromARGB(
+                                              255, 119, 204, 230)
                                           .withOpacity(.6),
                                       padding: EdgeInsets.symmetric(
                                           vertical: size.height * .02),
-                                      labelColor: const Color.fromARGB(255, 206, 33, 85) 
-                                          ,
-                                        
+                                      labelColor: const Color.fromARGB(
+                                          255, 206, 33, 85),
                                       labelStyle: TextStyle(
                                           fontSize: size.shortestSide * .043,
                                           fontWeight: FontWeight.bold),

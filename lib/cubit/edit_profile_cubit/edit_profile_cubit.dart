@@ -96,10 +96,37 @@ class EditProfileCubit extends Cubit<EditProfileState> {
     }
   }
 
+  selectImage(index) {
+
+    imageFile = null;
+      emit(ResetImageFileState());
+
+    selectedImage = index;
+    image = images[index];
+  
+
+    emit(ChosseImageState());
+  }
+
+  cancelSelected() async {
+    await SharedPreferences.getInstance().then((sharedPreferences) {
+      image = sharedPreferences.getString(AppKeys.personalImageKey)!;
+      selectedImage = -1;
+      emit(SuccessGettingUserDataState());
+    });
+  }
+
+  int selectedImage = -1;
   File? imageFile;
   String? imageName;
   final picker = ImagePicker();
-  List<String> images = [];
+  List<String> images = [
+    'https://firebasestorage.googleapis.com/v0/b/chat-friends-42245.appspot.com/o/avatar5.png?alt=media&token=e4d93e1b-f107-4f5f-b3b5-d8311212d558',
+    'https://firebasestorage.googleapis.com/v0/b/chat-friends-42245.appspot.com/o/avatar1.jpg?alt=media&token=53b5e5b3-2123-475c-b4eb-19bf86c789b5',
+    'https://firebasestorage.googleapis.com/v0/b/chat-friends-42245.appspot.com/o/avatar2.png?alt=media&token=ea12138b-9c5e-4579-bf90-c5e598dbbb1c',
+    'https://firebasestorage.googleapis.com/v0/b/chat-friends-42245.appspot.com/o/avatar3.png?alt=media&token=709f7df5-0928-42ba-a318-500ac81a10e3',
+    'https://firebasestorage.googleapis.com/v0/b/chat-friends-42245.appspot.com/o/avatar4.png?alt=media&token=fdd44910-5d7f-4235-8362-f7d966c364df'
+  ];
   bool isGettingDataLoad = false;
   bool? isPrivacy;
   getInitialValues() async {
@@ -131,23 +158,13 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   changePrivacy(value) async {
     log(isPrivacy.toString());
     log(value.toString());
-      isPrivacy = value;
+    isPrivacy = value;
     await FirebaseFirestore.instance
         .collection("users")
         .doc(userId)
         .update({"isPrivate": value});
     log(isPrivacy.toString());
     emit(ChangePrivacyState());
-  }
-
-  getStaticImage() {
-    images = [];
-    FirebaseFirestore.instance.collection("images").get().then((value) {
-      for (var element in value.docs) {
-        images.add(element.get("img"));
-      }
-      emit(GetStaticImageState());
-    });
   }
 
   getImage() {
@@ -224,6 +241,10 @@ class EditProfileCubit extends Cubit<EditProfileState> {
   logout({required BuildContext context}) async {
     await FirebaseAuth.instance.signOut().then((value) {
       SharedPreferences.getInstance().then((value) async {
+        FirebaseFirestore.instance
+            .collection("users")
+            .doc(userId)
+            .update({"status": false});
         await value.clear();
         Navigator.pushAndRemoveUntil(
             context,

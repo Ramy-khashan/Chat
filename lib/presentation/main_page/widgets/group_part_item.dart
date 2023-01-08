@@ -55,21 +55,25 @@ class _GroupPartItemState extends State<GroupPartItem>
               if (snapshot.hasData) {
                 return snapshot.data!.docs.isEmpty
                     ? Center(
-                        child: SingleChildScrollView(
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Image.asset("assets/image/empty.png"),
+                            Spacer()
+,
+                            Image.asset("assets/image/empty1.png",color: Colors.grey.shade300, scale: 1.5,),
+                                SizedBox(
+                              height: size.longestSide*.05,
+                            ),
                             Text(
                               "You not in any Group",
                               style: TextStyle(
+                                color: Colors.grey.shade300,
                                   fontSize: size.shortestSide * .05,
                                   fontWeight: FontWeight.bold),
                             ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            ButtonITem(
+                          
+                            Spacer()
+,                            ButtonITem(
                                 size: size,
                                 onTap: () {
                                   createGroupModelSheet(
@@ -82,8 +86,7 @@ class _GroupPartItemState extends State<GroupPartItem>
                                 },
                                 head: "Crate Group")
                           ],
-                        ),
-                      ))
+                        ))
                     : ListView.builder(
                         itemBuilder: (context, index) => Padding(
                           padding: const EdgeInsets.only(bottom: 8.0),

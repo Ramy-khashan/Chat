@@ -15,6 +15,8 @@ class SignUpCubit extends Cubit<SignUpState> {
   SignUpCubit() : super(SignUpInitial());
   static SignUpCubit get(ctx) => BlocProvider.of(ctx);
   final formKey = GlobalKey<FormState>();
+  RegExp emailRegex = RegExp(
+      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$');
   bool isLoading = false;
   final emailController = TextEditingController();
   final usernameController = TextEditingController();
@@ -60,7 +62,7 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   String image =
-      "https://firebasestorage.googleapis.com/v0/b/chat-44439.appspot.com/o/avatar2.png?alt=media&token=21d24ad9-573b-46d1-ad14-4e2b8836ba5b";
+     'https://firebasestorage.googleapis.com/v0/b/chat-friends-42245.appspot.com/o/avatar5.png?alt=media&token=e4d93e1b-f107-4f5f-b3b5-d8311212d558';
   addUserData(value, context) {
     try {
       FirebaseFirestore.instance.collection(AppKeys.firebaseUserKey).add({

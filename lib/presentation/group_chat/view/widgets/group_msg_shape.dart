@@ -17,7 +17,8 @@ class GroupMsgShapeItem extends StatelessWidget {
       required this.size,
       required this.isMyMsg,
       required this.date,
-      required this.userImage, required this.userName})
+      required this.userImage,
+      required this.userName})
       : super(key: key);
 
   @override
@@ -26,28 +27,21 @@ class GroupMsgShapeItem extends StatelessWidget {
       textDirection: isMyMsg ? TextDirection.rtl : TextDirection.ltr,
       child: Padding(
         padding: EdgeInsets.only(
-            bottom: size.longestSide * .01,
+            bottom: size.longestSide * .015,
             top: size.longestSide * .01,
             left: isMyMsg ? size.shortestSide * .15 : 0,
             right: isMyMsg ? 0 : size.shortestSide * .15),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ImageAvatarItem(
-              size: size,
-              img: userImage,
-              bgColor: isMyMsg ? mainColor : Colors.grey.shade300,
-              radius: .05,
-            ),
             Expanded(
               flex: message.length > 20 ? 1 : 0,
               child: Container(
-                margin: EdgeInsets.only(
-                    left: size.shortestSide * .01,
-                    right: size.shortestSide * .01),
+                margin: EdgeInsets.symmetric(
+                 horizontal: size.shortestSide * .01),
                 padding: EdgeInsets.symmetric(
-                    horizontal: size.shortestSide * .03,
-                    vertical: size.longestSide * .005),
+                    horizontal: size.shortestSide * .035,
+                    vertical: size.longestSide * .017),
                 decoration: BoxDecoration(
                   color: isMyMsg ? mainColor : Colors.grey.shade300,
                   borderRadius: BorderRadius.only(
@@ -62,15 +56,21 @@ class GroupMsgShapeItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    isMyMsg
+                        ? const SizedBox.shrink()
+                        : Text(
+                            userName.trim(),
+                            overflow: TextOverflow.clip,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: size.shortestSide * .042,
+                              color: isMyMsg ? Colors.white : Colors.black,
+                            ),
+                          ),
+                    const SizedBox(
+                      height: 2,
+                    ),
                     Text(
-                      userName.trim(),
-                      overflow: TextOverflow.clip,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: size.shortestSide * .042,
-                        color: isMyMsg ? Colors.white : Colors.black,
-                      ),
-                    ),const SizedBox(height: 2,),Text(
                       message.trim(),
                       overflow: TextOverflow.clip,
                       style: TextStyle(

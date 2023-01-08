@@ -80,7 +80,7 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   Future getChatId({required String mineId, required String friendId}) async {
-    log("Enter");
+   
     isLoadingDocsId = true;
     emit(StartGetChatIdState());
 
@@ -110,14 +110,56 @@ class ChatCubit extends Cubit<ChatState> {
         .collection("friedchat")
         .add({
       "userId": mineId,
+      "react": -1,
       "msg": messageController.value.text.trim(),
       "date": DateTime.now()
     }).then((value) {
       messageController.clear();
+      getTextFieldifEmpty("");
       emit(SendMessageState());
     }).onError<FirebaseException>((error, stackTrace) {
       log(error.message!);
     });
+  }
+
+  sendLike(mineId) async {
+    await FirebaseFirestore.instance
+        .collection("chats")
+        .doc(docsId)
+        .collection("friedchat")
+        .add({
+      "userId": mineId,
+      "react": -1,
+      "msg": AppKeys.likeKey,
+      "date": DateTime.now()
+    });
+  }
+
+  bool isTextFieldEmpty = true;
+  getTextFieldifEmpty(String val) {
+    isTextFieldEmpty = val.trim().isEmpty;
+    emit(ChangeIsEmptyState());
+  }
+
+  msgReact(
+      {required String msgId,
+      required int reactValue,
+      required String selectedReact}) async {
+    if (reactValue == int.parse(selectedReact)) {
+      await FirebaseFirestore.instance
+          .collection("chats")
+          .doc(docsId)
+          .collection("friedchat")
+          .doc(msgId)
+          .update({"react": -1});
+    } else {
+      await FirebaseFirestore.instance
+          .collection("chats")
+          .doc(docsId)
+          .collection("friedchat")
+          .doc(msgId)
+          .update({"react": int.parse(selectedReact)});
+    }
   }
 
   String tag = "123";

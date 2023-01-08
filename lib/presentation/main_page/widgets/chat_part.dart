@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import '../../../core/Widgets/image_avatar.dart';
 import '../../../core/Widgets/loading.dart';
 import '../../../core/constant.dart';
@@ -54,6 +54,7 @@ class ChatPartItem extends StatelessWidget {
                                       friendId: snapshot.data!.id,
                                       friendImg: snapshot.data!.get("img"),
                                       friendName: snapshot.data!.get("name"),
+                                      status:      snapshot.data!.get("status")
                                     ),
                                   ),
                                 );
@@ -63,11 +64,26 @@ class ChatPartItem extends StatelessWidget {
                                     top: size.longestSide * .02,
                                   ),
                                   child: ListTile(
-                                    leading: ImageAvatarItem(
-                                      img: snapshot.data!.get("img"),
-                                      size: size,
-                                      bgColor: mainColor,
-                                      radius: .07,
+                                    leading: Stack(
+                                      children: [
+                                        ImageAvatarItem(
+                                          img: snapshot.data!.get("img"),
+                                          size: size,
+                                          bgColor: mainColor,
+                                          radius: .07,
+                                        ),
+                                        Positioned(
+                                          right:0 ,
+                                          bottom: 0,
+                                          child: CircleAvatar(
+                                            backgroundColor:
+                                                snapshot.data!.get("status")
+                                                    ? Colors.green
+                                                    : Colors.grey.shade500,
+                                            radius: size.shortestSide*.02,
+                                          ),
+                                        )
+                                      ],
                                     ),
                                     title: Text(
                                       snapshot.data!.get("name"),

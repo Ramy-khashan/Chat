@@ -11,6 +11,7 @@ class UpdateValueState extends MainPageState {}
 class GetIdState extends MainPageState {}
 
 class GetGroupImageState   extends MainPageState {}
+class GetLastMsgState   extends MainPageState {}
 
 class GetFriendsState extends MainPageState {}
 

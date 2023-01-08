@@ -1,16 +1,15 @@
-import 'dart:developer';
-import 'package:chat/core/Widgets/loading.dart';
+ import 'package:chat/core/Widgets/loading.dart';
 import 'package:chat/core/constant.dart';
 import 'package:chat/cubit/edit_profile_cubit/edit_profile_cubit.dart';
-import 'package:chat/presentation/edit_profile/widgets/add_friend_by_id_item.dart';
+ import 'package:chat/presentation/edit_profile/widgets/add_friend_by_id_item.dart';
+import 'package:chat/presentation/edit_profile/widgets/selected_image_item.dart';
 import 'package:chat/presentation/edit_profile/widgets/show_id.dart';
 import 'package:chat/presentation/main_page/main_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/Widgets/bottom_sheet_head.dart';
 import '../../core/Widgets/button.dart';
-import '../../core/Widgets/image_avatar.dart';
-import '../../cubit/edit_profile_cubit/edit_profile_state.dart';
+ import '../../cubit/edit_profile_cubit/edit_profile_state.dart';
 import '../main_page/widgets/head_main_page.dart';
 
 class EditProfileScreen extends StatefulWidget {
@@ -25,9 +24,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return BlocProvider(
-      create: (context) => EditProfileCubit()
-        ..getStaticImage()
-        ..getInitialValues(),
+      create: (context) => EditProfileCubit()..getInitialValues(),
       child: Scaffold(
         body: SafeArea(
           child: BlocBuilder<EditProfileCubit, EditProfileState>(
@@ -135,14 +132,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             },
                                             child: controller.imageFile == null
                                                 ? CircleAvatar(
-                                                  
-                                                   backgroundImage: const AssetImage("assets/image/user.jpeg"),
-                                                   foregroundImage:
+                                                 
+                                                    foregroundImage:
                                                         NetworkImage(
                                                             controller.image),
                                                     radius:
                                                         size.shortestSide * .16,
-                                                    backgroundColor: Colors.transparent,
+                                                    backgroundColor:
+                                                        Colors.transparent,
                                                     child: Icon(
                                                       Icons.camera_alt,
                                                       color:
@@ -152,7 +149,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                     ),
                                                   )
                                                 : CircleAvatar(
-                                                    backgroundImage: FileImage(
+                                                     backgroundImage:
+                                                        const AssetImage(
+                                                            "assets/image/user.jpeg"),
+                                                    foregroundImage: FileImage(
                                                         controller.imageFile!),
                                                     radius:
                                                         size.shortestSide * .16,
@@ -177,73 +177,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                           fontSize: size.shortestSide * .055,
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: size.longestSide * .035,
-                                      ),
-                                      Text(
-                                        "Or choose photo from",
-                                        style: TextStyle(
-                                            fontSize: size.longestSide * .02,
-                                            color: Colors.grey),
-                                      ),
-                                      SizedBox(
-                                        height: size.longestSide * .02,
-                                      ),
-                                      SingleChildScrollView(
-                                        scrollDirection: Axis.horizontal,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: List.generate(
-                                            controller.images.length,
-                                            (index) => InkWell(
-                                              onTap: () {
-                                                log(controller.images[index]);
-                                              },
-                                              child: Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal:
-                                                      size.shortestSide * .02,
-                                                ),
-                                                child: ImageAvatarItem(
-                                                  size: size,
-                                                  bgColor: mainColor,
-                                                  radius: .12,
-                                                  img: controller.images[index],
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: size.longestSide * .03,
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: size.shortestSide * .1,
-                                        ),
-                                        child: TextField(
-                                          controller: controller.nameController,
-                                          decoration: InputDecoration(
-                                              fillColor: Colors.grey.shade200,
-                                              filled: true,
-                                              hintText: "Change your name",
-                                              border: OutlineInputBorder(
-                                                borderSide: BorderSide.none,
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                              ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide.none,
-                                                borderRadius:
-                                                    BorderRadius.circular(20),
-                                              )),
-                                        ),
-                                      ),
-                                      SizedBox(
-                                        height: size.longestSide * .02,
-                                      ),
+                                      SelectedImageItem(size: size),
                                       Padding(
                                         padding: EdgeInsets.symmetric(
                                           horizontal: size.shortestSide * .1,
@@ -273,7 +207,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                               controller.logout(
                                                   context: context);
                                             },
-                                            color: Color.fromARGB(255, 193, 33, 78) ,
+                                            color: const Color.fromARGB(
+                                                255, 193, 33, 78),
                                             head: "Log Out"),
                                       ),
                                     ],

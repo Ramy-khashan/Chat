@@ -5,9 +5,12 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/foundation.dart' as foundation;
+import 'package:flutter_reaction_button/flutter_reaction_button.dart';
 
 import '../../../core/Widgets/chat_textfield.dart';
+import '../../../core/app_keys.dart';
 import '../../../core/constant.dart';
+import '../../../data/reaction_data.dart';
 import 'widgets/group_chat_head.dart';
 import 'widgets/group_msg_shape.dart';
 
@@ -46,7 +49,7 @@ class GroupChatScreen extends StatelessWidget {
               return controller.systemBackButton();
             },
             child: Scaffold(
-        backgroundColor: mainColor,
+              backgroundColor: mainColor,
               body: Stack(
                 children: [
                   SafeArea(
@@ -66,7 +69,7 @@ class GroupChatScreen extends StatelessWidget {
                                   stream: FirebaseFirestore.instance
                                       .collection("group")
                                       .doc(controller.groupId)
-                                      .collection("croup_chat")
+                                      .collection("group_chat")
                                       .orderBy("date", descending: true)
                                       .snapshots(),
                                   builder: (context,
@@ -79,23 +82,81 @@ class GroupChatScreen extends StatelessWidget {
                                             horizontal: size.shortestSide * .03,
                                             vertical: size.shortestSide * .02),
                                         reverse: true,
-                                        itemBuilder: (context, index) =>
-                                            GroupMsgShapeItem(
-                                                date: snapshot.data!.docs[index]
-                                                    .get("date") as Timestamp,
-                                                userImage: snapshot
-                                                    .data!.docs[index]
-                                                    .get("userImage"),
-                                                userName: snapshot
-                                                    .data!.docs[index]
-                                                    .get("userName"),
-                                                isMyMsg: userId ==
-                                                    snapshot.data!.docs[index]
-                                                        .get("userId"),
-                                                message: snapshot
-                                                    .data!.docs[index]
-                                                    .get("msg"),
-                                                size: size),
+                                        itemBuilder: (context, index) {
+                                          var item = snapshot.data!.docs[index];
+                                          return item.get("msg") ==
+                                                  AppKeys.likeKey
+                                              ? Align(
+                                                  alignment: controller
+                                                              .userId ==
+                                                          item.get("userId")
+                                                      ? Alignment.centerRight
+                                                      : Alignment.centerLeft,
+                                                  child: Image.asset(
+                                                    "assets/image/like.png",
+                                                    width:
+                                                        size.shortestSide * .2,
+                                                  ),
+                                                )
+                                              : GroupMsgShapeItem(
+                                                  date: item.get("date")
+                                                      as Timestamp,
+                                                  userImage:
+                                                      item.get("userImage"),
+                                                  userName:
+                                                      item.get("userName"),
+                                                  isMyMsg: userId ==
+                                                      item.get("userId"),
+                                                  message: item.get("msg"),
+                                                  size: size);
+                                          //  ReactionContainer<String>(
+                                          //     onReactionChanged:
+                                          //         (String? value) {
+                                          //       if (value!.isNotEmpty) {
+                                          //         controller.msgReact(
+                                          //             msgId: item.id,
+                                          //             reactValue:
+                                          //                 item.get("react"),
+                                          //             selectedReact: value);
+                                          //       }
+                                          //     },
+                                          //     reactions: reactions,
+                                          //     child: Stack(
+                                          //       children: [
+                                          //         GroupMsgShapeItem(
+                                          //             date: item.get("date")
+                                          //                 as Timestamp,
+                                          //             userImage: item
+                                          //                 .get("userImage"),
+                                          //             userName: item
+                                          //                 .get("userName"),
+                                          //             isMyMsg: userId ==
+                                          //                 item.get(
+                                          //                     "userId"),
+                                          //             message:
+                                          //                 item.get("msg"),
+                                          //             size: size),
+                                          //         item.get("react") == -1
+                                          //             ? const SizedBox
+                                          //                 .shrink()
+                                          //             : Positioned(
+                                          //                 bottom: 0,
+                                          //                 right: 4,
+                                          //                 child:
+                                          //                     CircleAvatar(
+                                          //                   radius:
+                                          //                       size.shortestSide *
+                                          //                           .03,
+                                          //                   foregroundImage:
+                                          //                       AssetImage(
+                                          //                     imgs[item.get(
+                                          //                         "react")],
+                                          //                   ),
+                                          //                 ))
+                                          //       ],
+                                          //     ),
+                                          //   );
+                                        },
                                         itemCount: snapshot.data!.docs.length,
                                       );
                                     } else {
@@ -104,77 +165,70 @@ class GroupChatScreen extends StatelessWidget {
                                   }),
                             ),
                             ChatTextFieldItem(
+                                isEmpty: controller.isTextFieldEmpty,
+                                onClickLike: () {
+                                  controller.sendLike();
+                                },
+                                onChange: (val) {
+                                  controller.getTextFieldifEmpty(val);
+                                },
                                 isdisable: controller.isdisable,
                                 onTapEmoij: () {
                                   controller.setEmoji();
                                 },
                                 isEmoji: controller.isEmoji,
                                 onSendMessage: () async {
-                                  if (controller.groupChatController.text
-                                      .trim()
-                                      .isNotEmpty) {
-                                    await FirebaseFirestore.instance
-                                        .collection("group")
-                                        .doc(controller.groupId)
-                                        .collection("croup_chat")
-                                        .add({
-                                      "msg": controller.groupChatController.text
-                                          .trim(),
-                                      "userImage": controller.userImage.trim(),
-                                      "userName": controller.userName.trim(),
-                                      "date": DateTime.now(),
-                                      "userId": userId
-                                    }).whenComplete(() {
-                                      controller.groupChatController.clear();
-                                    });
-                                  }
+                                  controller.sendMsg();
                                 },
                                 size: size,
                                 messageController:
                                     controller.groupChatController),
-                           Offstage(
-                offstage: !controller.isEmoji,
-                child: SizedBox(
-                    height: 250,
-                    child: EmojiPicker(
-                      textEditingController: controller.groupChatController,
-                      config: Config(
-                        columns: 7,
-                        // Issue: https://github.com/flutter/flutter/issues/28894
-                        emojiSizeMax: 32 *
-                            (foundation.defaultTargetPlatform ==
-                                    TargetPlatform.iOS
-                                ? 1.30
-                                : 1.0),
-                        verticalSpacing: 0,
-                        horizontalSpacing: 0,
-                        gridPadding: EdgeInsets.zero,
-                        initCategory: Category.RECENT,
-                        bgColor: const Color(0xFFF2F2F2),
-                        indicatorColor: Colors.blue,
-                        iconColor: Colors.grey,
-                        iconColorSelected: Colors.blue,
-                        backspaceColor: Colors.blue,
-                        skinToneDialogBgColor: Colors.white,
-                        skinToneIndicatorColor: Colors.grey,
-                        enableSkinTones: true,
-                        showRecentsTab: true,
-                        recentsLimit: 28,
-                        replaceEmojiOnLimitExceed: false,
-                        noRecents: const Text(
-                          'No Recents',
-                          style: TextStyle(fontSize: 20, color: Colors.black26),
-                          textAlign: TextAlign.center,
-                        ),
-                        loadingIndicator: const SizedBox.shrink(),
-                        tabIndicatorAnimDuration: kTabScrollDuration,
-                        categoryIcons: const CategoryIcons(),
-                        buttonMode: ButtonMode.MATERIAL,
-                        checkPlatformCompatibility: true,
-                      ),
-                    )),
-                                 )
-                         
+                            Offstage(
+                              offstage: !controller.isEmoji,
+                              child: SizedBox(
+                                  height: 250,
+                                  child: EmojiPicker(
+                                    textEditingController:
+                                        controller.groupChatController,
+                                    config: Config(
+                                      columns: 7,
+                                       
+                                      emojiSizeMax: 32 *
+                                          (foundation.defaultTargetPlatform ==
+                                                  TargetPlatform.iOS
+                                              ? 1.30
+                                              : 1.0),
+                                      verticalSpacing: 0,
+                                      horizontalSpacing: 0,
+                                      gridPadding: EdgeInsets.zero,
+                                      initCategory: Category.RECENT,
+                                      bgColor: const Color(0xFFF2F2F2),
+                                      indicatorColor: Colors.blue,
+                                      iconColor: Colors.grey,
+                                      iconColorSelected: Colors.blue,
+                                      backspaceColor: Colors.blue,
+                                      skinToneDialogBgColor: Colors.white,
+                                      skinToneIndicatorColor: Colors.grey,
+                                      enableSkinTones: true,
+                                      showRecentsTab: true,
+                                      recentsLimit: 28,
+                                      replaceEmojiOnLimitExceed: false,
+                                      noRecents: const Text(
+                                        'No Recents',
+                                        style: TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.black26),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      loadingIndicator: const SizedBox.shrink(),
+                                      tabIndicatorAnimDuration:
+                                          kTabScrollDuration,
+                                      categoryIcons: const CategoryIcons(),
+                                      buttonMode: ButtonMode.MATERIAL,
+                                      checkPlatformCompatibility: true,
+                                    ),
+                                  )),
+                            )
                           ],
                         ),
                       ))
@@ -193,7 +247,8 @@ class GroupChatScreen extends StatelessWidget {
                                   duration: const Duration(milliseconds: 600),
                                   curve: Curves.easeInOut);
                             },
-                            child: const Icon(Icons.keyboard_arrow_down_rounded),
+                            child:
+                                const Icon(Icons.keyboard_arrow_down_rounded),
                           ),
                         )
                       : const SizedBox.shrink()

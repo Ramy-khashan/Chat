@@ -1,7 +1,7 @@
 import 'package:regexpattern/regexpattern.dart';
 import 'package:chat/core/Widgets/button.dart';
 import 'package:chat/core/Widgets/loading.dart';
- import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../core/Widgets/text_field.dart';
 import '../../../cubit/signup_cubit/sign_up_cubit.dart';
@@ -37,14 +37,13 @@ class SignUpScreen extends StatelessWidget {
                     isSecure: false,
                     hint: "Enter your username",
                     onValid: (val) {
- 
                       if (val.isEmpty) {
                         return "This field must fill";
                       }
-                       else if (controller.usernameController.text.length >
-                          20) {
+                      if (controller.usernameController.text.length > 20) {
                         return "user name must less than 20 charchter";
                       }
+                      return null;
                     },
                     size: size,
                     head: "Username",
@@ -57,13 +56,13 @@ class SignUpScreen extends StatelessWidget {
                     isSecure: false,
                     hint: "Enter your email",
                     onValid: (val) {
-                      
-                      if (val.isEmail()) {
-                        return "Enter Email In Correct Form";
-                      }
                       if (val.isEmpty) {
-                        return "This field must fill";
+                        return "Email can't be empty";
                       }
+                      if (!controller.emailRegex.hasMatch(val)) {
+                        return "Email is not valid";
+                      }
+                      return null;
                     },
                     size: size,
                     head: "Email",
@@ -78,12 +77,10 @@ class SignUpScreen extends StatelessWidget {
                     isSecure: controller.isSecure,
                     hint: "Enter your password",
                     onValid: (val) {
-                      
-                      if (val.isPasswordNormal2()) {
-                        return "Enter Password In Correct Form";
-                      }
                       if (val.isEmpty) {
                         return "This field must fill";
+                      }if (val.trim().length<7) {
+                        return "This password too short";
                       }
                     },
                     size: size,
@@ -99,10 +96,6 @@ class SignUpScreen extends StatelessWidget {
                     isSecure: controller.isSecureConfirmPass,
                     hint: "Re-Enter password",
                     onValid: (val) {
-                      
-                     if (val.isPasswordNormal2()) {
-                        return "Enter Password In Correct Form";
-                      }
                       if (val.isEmpty) {
                         return "This field must fill";
                       } else if (controller.passwordController.text !=
@@ -113,7 +106,9 @@ class SignUpScreen extends StatelessWidget {
                     size: size,
                     head: "Confirm Password",
                   ),
-                     SizedBox(height:  size.longestSide * .02,) ,
+                  SizedBox(
+                    height: size.longestSide * .02,
+                  ),
                   controller.isLoading
                       ? const LoadingItem()
                       : ButtonITem(

@@ -5,4 +5,5 @@ class AppKeys {
   static const String firebaseUserKey = "users";
   static const String personalImageKey = "img";
   static const String nameKey = "name";
+  static const String likeKey = "like:-1";
 }

@@ -126,6 +126,70 @@ class GroupChatCubit extends Cubit<GroupChatState> {
     });
   }
 
+  sendLike() async {
+    
+      await FirebaseFirestore.instance
+          .collection("group")
+          .doc(groupId)
+          .collection("group_chat")
+          .add({
+        "react": -1,
+        "msg": AppKeys.likeKey,
+        "userImage": userImage.trim(),
+        "userName": userName.trim(),
+        "date": DateTime.now(),
+        "userId": userId
+      });
+     
+  }
+
+  bool isTextFieldEmpty = true;
+  getTextFieldifEmpty(String val) {
+    isTextFieldEmpty = val.trim().isEmpty;
+    emit(ChangeIsEmptyState());
+  }
+
+  msgReact(
+      {required String msgId,
+      required int reactValue,
+      required String selectedReact}) async {
+    if (reactValue == int.parse(selectedReact)) {
+      await FirebaseFirestore.instance
+          .collection("group")
+          .doc(groupId)
+          .collection("friedchat")
+          .doc(msgId)
+          .update({"react": -1});
+    } else {
+      await FirebaseFirestore.instance
+          .collection("group")
+          .doc(groupId)
+          .collection("group_chat")
+          .doc(msgId)
+          .update({"react": int.parse(selectedReact)});
+    }
+  }
+
+  sendMsg() async {
+    if (groupChatController.text.trim().isNotEmpty) {
+      await FirebaseFirestore.instance
+          .collection("group")
+          .doc(groupId)
+          .collection("group_chat")
+          .add({
+        "msg": groupChatController.text.trim(),
+        "react": -1,
+        "userImage": userImage.trim(),
+        "userName": userName.trim(),
+        "date": DateTime.now(),
+        "userId": userId
+      }).whenComplete(() {
+        groupChatController.clear();
+        getTextFieldifEmpty("");
+      });
+    }
+  }
+
   bool isEmoji = false;
   setEmoji() {
     isdisable = !isdisable;

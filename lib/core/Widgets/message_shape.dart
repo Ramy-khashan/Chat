@@ -26,7 +26,7 @@ class MessageShapeItem extends StatelessWidget {
       textDirection: isMyMsg ? TextDirection.rtl : TextDirection.ltr,
       child: Padding(
         padding: EdgeInsets.only(
-            bottom: size.longestSide * .01,
+            bottom: size.longestSide * .012,
             top: size.longestSide * .01,
             left: isMyMsg ? size.shortestSide * .15 : 0,
             right: isMyMsg ? 0 : size.shortestSide * .15),
@@ -47,7 +47,7 @@ class MessageShapeItem extends StatelessWidget {
                     right: size.shortestSide * .01),
                 padding: EdgeInsets.symmetric(
                     horizontal: size.shortestSide * .035,
-                    vertical: size.longestSide * .013),
+                    vertical: size.longestSide * .016),
                 decoration: BoxDecoration(
                   color: isMyMsg ? mainColor : Colors.grey.shade300,
                   borderRadius: BorderRadius.only(

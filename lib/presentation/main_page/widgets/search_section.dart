@@ -70,8 +70,10 @@ class SearchSection extends StatelessWidget {
                                   bgColor: mainColor,
                                   radius: .07,
                                 ),
-                                title: Text(snapshotSearch.data!.docs[index]
-                                    .get("name")),
+                                title: Text(
+                                  snapshotSearch.data!.docs[index].get("name"),
+                                  style: const TextStyle(color: Colors.white),
+                                ),
                                 trailing: StreamBuilder<DocumentSnapshot>(
                                     stream: FirebaseFirestore.instance
                                         .collection("users")
@@ -114,6 +116,9 @@ class SearchSection extends StatelessWidget {
                                                   FirebaseFirestore.instance
                                                       .collection("chats")
                                                       .add({
+                                                    "last_msg": "",
+                                                    "last_msg_date":
+                                                        DateTime.now(),
                                                     "user1":
                                                         snapshotMine.data!.id,
                                                     "user2": snapshotSearch
@@ -123,12 +128,6 @@ class SearchSection extends StatelessWidget {
                                                       snapshotSearch
                                                           .data!.docs[index].id
                                                     ],
-                                                  }).then((value) {
-                                                    FirebaseFirestore.instance
-                                                        .collection("chats")
-                                                        .doc(value.id)
-                                                        .collection(
-                                                            "frinds_chat");
                                                   });
                                                 },
                                           child: Container(
@@ -146,11 +145,11 @@ class SearchSection extends StatelessWidget {
                                                           .data!.docs[index].id)
                                                   ? const Icon(
                                                       Icons.done,
-                                                      color: Colors.black,
+                                                      color: Colors.white,
                                                     )
                                                   : const Icon(
                                                       Icons.add,
-                                                      color: Colors.black,
+                                                      color: Colors.white,
                                                     )),
                                         );
                                       } else {
