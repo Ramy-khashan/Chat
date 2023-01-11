@@ -159,6 +159,46 @@ class MainPageCubit extends Cubit<MainPageState> {
     emit(GetFriendsState());
   }
 
+  bool isLoadinUsers = false;
+  List<UserModel>? users;
+  getFriendData({required String id}) async {
+    isLoadinUsers = true;
+    emit(GetFriendDataLoadingState());
+
+    users = [];
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(id)
+        .get()
+        .then((value) async {
+      for (var element in List.from(value.get("connections"))) {
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(element)
+            .get()
+            .then((value) {
+          users!.add(UserModel(
+              status: value.get('status'),
+              userName: value.get('name'),
+              userImg: value.get('img'),
+              userId: value.get('userId'),
+              lastMsg: "",
+              date: ""));
+        });
+      }
+      isLoadinUsers = false;
+
+      emit(GetFriendDataSuccessState());
+    }).onError<FirebaseException>((error, stackTrace) {
+      isLoadinUsers = false;
+
+      emit(GetFriendDataFaildState());
+
+      Fluttertoast.showToast(msg: error.message!);
+    });
+  }
+
   addToSelected(index) {
     if (connectionsChecks[index] == 0) {
       connectionsChecks[index] = 1;
@@ -169,20 +209,26 @@ class MainPageCubit extends Cubit<MainPageState> {
     }
   }
 
- 
-    getChatId({required String mineId, required String friendId}) async {
+  getChatId({required String mineId, required String friendId}) async {
     await FirebaseFirestore.instance.collection("chats").get().then((value) {
       for (var element in value.docs) {
         List connectons = List.from(element.get("users"));
         log(connectons.toString());
         if (connectons.contains(mineId) && connectons.contains(friendId)) {
           return element;
-          
         }
       }
     });
     emit(GetLastMsgState());
   }
 
+  List<Map<String, dynamic>> item = [
+    {"name": "ahmed", "phone": 01011738544},
+    {"name": "ramy", "phone": 01011738541},
+    {"name": "hussein", "phone": 01011738542},
+  ];
+printString(){
+  print(item[0]["name"]);
+}
   // List<UserModel> users = [];
 }

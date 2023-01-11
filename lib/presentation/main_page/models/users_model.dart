@@ -1,15 +1,18 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
+ 
 class UserModel {
+  
   final String userName;
-  final String userrImg;
+  final String userImg;
+  final String userId;
   final String lastMsg;
   final bool status;
-  final Timestamp date;
+  final String date;
 
-  UserModel(this.status,
+  UserModel(
       {required this.userName,
-      required this.userrImg,
+      required this.userImg,
+      required this.userId,
+      required this.status,
       required this.lastMsg,
       required this.date});
 }

@@ -14,33 +14,27 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
-   {
-  late SharedPreferences preferences;
-  late String auth;
-  late String id;
-  getIsAuth() async {
-    preferences = await SharedPreferences.getInstance();
-    auth = preferences.get(AppKeys.authKey).toString();
-    id = preferences.get(AppKeys.userId).toString();
-    setState(() {});
-  }
- 
-  @override
-  void initState() {
-    getIsAuth();
-    Timer(const Duration(milliseconds: 2500), () {
+class _SplashScreenState extends State<SplashScreen> {
+  timer() async {
+    Timer(const Duration(milliseconds: 2500), () async {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+
       Navigator.pushAndRemoveUntil(context,
           MaterialPageRoute(builder: (context) {
-        if (auth == "yes") {
+        if (preferences.get(AppKeys.authKey).toString() == "yes") {
           return MainPageScreen(
-            id: id,
+            id: preferences.get(AppKeys.userId).toString(),
           );
         } else {
           return const AuthScreen();
         }
       }), (route) => false);
     });
+  }
+
+  @override
+  void initState() {
+    timer();
     super.initState();
   }
 

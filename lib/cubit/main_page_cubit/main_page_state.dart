@@ -7,6 +7,9 @@ class ShowSearchState extends MainPageState {}
 class UserImageState extends MainPageState {}
 
 class UpdateValueState extends MainPageState {}
+class GetFriendDataFaildState extends MainPageState {}
+class GetFriendDataLoadingState extends MainPageState {}
+class GetFriendDataSuccessState extends MainPageState {}
 
 class GetIdState extends MainPageState {}
 

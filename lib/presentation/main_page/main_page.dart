@@ -61,8 +61,9 @@ class _MainPageScreenState extends State<MainPageScreen>
     Size size = MediaQuery.of(context).size;
 
     return BlocProvider(
-      create: (context) => MainPageCubit()
+      create: (context) => MainPageCubit() 
         ..getFriends(widget.id)
+        ..getFriendData(id: widget.id)
         ..initialRegister(
             isFromReg: widget.isFromReg, context: context, size: size)
         ..getImage(id: widget.id),
